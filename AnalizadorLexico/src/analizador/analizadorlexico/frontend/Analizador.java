@@ -75,6 +75,11 @@ public class Analizador extends javax.swing.JFrame {
         jMenu1.add(jMenuItemNew);
 
         jMenuItemOpen.setText("Open");
+        jMenuItemOpen.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemOpenActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItemOpen);
 
         jMenuItemSave.setText("Save");
@@ -174,6 +179,10 @@ public class Analizador extends javax.swing.JFrame {
                 + "                            201731115\n4to Semestre Ing. Sistemas CUNOC - USAC", "About...", JOptionPane.INFORMATION_MESSAGE, desarrollador);
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
+    private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
+        ma.abrirDocumento();
+    }//GEN-LAST:event_jMenuItemOpenActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
@@ -188,8 +197,8 @@ public class Analizador extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemPaste;
     private javax.swing.JMenuItem jMenuItemRedo;
-    private javax.swing.JMenuItem jMenuItemSave;
-    private javax.swing.JMenuItem jMenuItemSaveAs;
+    public javax.swing.JMenuItem jMenuItemSave;
+    public javax.swing.JMenuItem jMenuItemSaveAs;
     private javax.swing.JMenuItem jMenuItemUndo;
     private javax.swing.JPanel jPanel1;
     public javax.swing.JTabbedPane jTabbedPane;
