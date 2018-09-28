@@ -99,7 +99,6 @@ public class SeleccionadorArchivo extends javax.swing.JDialog {
         File direccion = chooser.getSelectedFile();
         if (comando.equals(JFileChooser.APPROVE_SELECTION)) {
             this.direccion = direccion;
-            System.out.println(direccion.getAbsolutePath());
             this.dispose();
         } else if (comando.equals(JFileChooser.CANCEL_SELECTION)) {
             this.direccion = null;

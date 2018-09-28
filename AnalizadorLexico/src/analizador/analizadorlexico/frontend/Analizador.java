@@ -164,7 +164,7 @@ public class Analizador extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemCloseTabActionPerformed
 
     private void jMenuItemSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveActionPerformed
-        ma.guardarArchivo();
+        ma.guardarArchivo(jTabbedPane.getSelectedIndex());
     }//GEN-LAST:event_jMenuItemSaveActionPerformed
 
     private void jMenuItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemExitActionPerformed
@@ -172,15 +172,11 @@ public class Analizador extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemExitActionPerformed
 
     private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
-        ImageIcon desarrollador = new ImageIcon("desarrollador.png");
-        JOptionPane.showMessageDialog(null, "                     Analizador Lexico\n\n"
-                + "                      Desarrollado por:\n"
-                + "            Ivan Fabricio Racancoj García\n"
-                + "                            201731115\n4to Semestre Ing. Sistemas CUNOC - USAC", "About...", JOptionPane.INFORMATION_MESSAGE, desarrollador);
+        ma.showInformacionDesarrollador();
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
-        ma.abrirDocumento();
+        ma.abrirDocumento(jTabbedPane.getComponentCount());
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
 
 
