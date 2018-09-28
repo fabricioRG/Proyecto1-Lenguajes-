@@ -15,6 +15,7 @@ import javax.swing.JFileChooser;
 public class GuardadorArchivo extends javax.swing.JDialog {
 
     private File direccion = null;
+    final static String TIPO_TXT = ".txt";
 
     /**
      * Creates new form exportadorHTML
@@ -103,8 +104,11 @@ public class GuardadorArchivo extends javax.swing.JDialog {
         String comando = evt.getActionCommand();
         File direccion = chooser.getSelectedFile();
         if (comando.equals(JFileChooser.APPROVE_SELECTION)) {
-            this.direccion = direccion;
-            System.out.println(direccion.getAbsolutePath());
+            if(direccion.getAbsolutePath().endsWith(TIPO_TXT)){
+                this.direccion = new File(direccion.getAbsolutePath());
+            } else {
+                this.direccion = new File(direccion.getAbsolutePath() + TIPO_TXT);
+            }
             this.dispose();
         } else if (comando.equals(JFileChooser.CANCEL_SELECTION)) {
             this.direccion = null;

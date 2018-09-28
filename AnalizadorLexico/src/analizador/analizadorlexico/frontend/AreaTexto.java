@@ -1,18 +1,26 @@
 package analizador.analizadorlexico.frontend;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import javax.swing.JEditorPane;
 
 /**
  *
  * @author fabricio
  */
-public class AreaTexto extends javax.swing.JPanel {
+public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseListener{
+
+    public String textoIngresado = "";
 
     /**
      * Creates new form AreaTexto
      */
     public AreaTexto() {
         initComponents();
+        jEditorPaneTexto.addKeyListener(this);
+        jEditorPaneTexto.addMouseListener(this);
     }
 
     /**
@@ -26,15 +34,17 @@ public class AreaTexto extends javax.swing.JPanel {
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jEditorPane1 = new javax.swing.JEditorPane();
+        jEditorPaneTexto = new javax.swing.JEditorPane();
 
         setPreferredSize(new java.awt.Dimension(844, 455));
 
-        jEditorPane1.setBackground(new java.awt.Color(2, 36, 61));
-        jEditorPane1.setForeground(new java.awt.Color(254, 254, 254));
-        jEditorPane1.setCaretColor(new java.awt.Color(254, 254, 254));
-        jEditorPane1.setMargin(new java.awt.Insets(7, 7, 7, 7));
-        jScrollPane1.setViewportView(jEditorPane1);
+        jEditorPaneTexto.setBackground(new java.awt.Color(2, 36, 61));
+        jEditorPaneTexto.setContentType("text/html"); // NOI18N
+        jEditorPaneTexto.setFont(new java.awt.Font("Caviar Dreams", 0, 12)); // NOI18N
+        jEditorPaneTexto.setForeground(new java.awt.Color(254, 254, 254));
+        jEditorPaneTexto.setText("<html>\n  <head>\n  </head>\n  <body style=\"color:white;font-family:Open Sans Light;padding:3px;\">\n  </body>\n</html>\n");
+        jEditorPaneTexto.setCaretColor(new java.awt.Color(254, 254, 254));
+        jScrollPane1.setViewportView(jEditorPaneTexto);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -66,16 +76,56 @@ public class AreaTexto extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     public JEditorPane getjEditorPane1() {
-        return jEditorPane1;
+        return jEditorPaneTexto;
     }
 
     public void setjEditorPane1(JEditorPane jEditorPane1) {
-        this.jEditorPane1 = jEditorPane1;
+        this.jEditorPaneTexto = jEditorPane1;
     }
 
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        System.out.println(jEditorPaneTexto.getText());
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        System.out.println(jEditorPaneTexto.getText());
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JEditorPane jEditorPane1;
+    private javax.swing.JEditorPane jEditorPaneTexto;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
+
+    
 }

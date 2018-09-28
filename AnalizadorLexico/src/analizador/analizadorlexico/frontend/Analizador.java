@@ -1,8 +1,6 @@
 package analizador.analizadorlexico.frontend;
 
 import analizador.analizadorlexico.backend.ManejadorAnalizador;
-import javax.swing.ImageIcon;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -91,6 +89,11 @@ public class Analizador extends javax.swing.JFrame {
         jMenu1.add(jMenuItemSave);
 
         jMenuItemSaveAs.setText("Save As...");
+        jMenuItemSaveAs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemSaveAsActionPerformed(evt);
+            }
+        });
         jMenu1.add(jMenuItemSaveAs);
 
         jMenuItemCloseTab.setText("Close tab");
@@ -112,9 +115,19 @@ public class Analizador extends javax.swing.JFrame {
         jMenu2.add(jMenuItemRedo);
 
         jMenuItemCopy.setText("Copy");
+        jMenuItemCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemCopyActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItemCopy);
 
         jMenuItemPaste.setText("Paste");
+        jMenuItemPaste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemPasteActionPerformed(evt);
+            }
+        });
         jMenu2.add(jMenuItemPaste);
 
         jMenuBar1.add(jMenu2);
@@ -172,14 +185,26 @@ public class Analizador extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemExitActionPerformed
 
     private void jMenuItemAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemAboutActionPerformed
-        ma.showInformacionDesarrollador();
+        ma.mostrarInformacionDesarrollador();
     }//GEN-LAST:event_jMenuItemAboutActionPerformed
 
     private void jMenuItemOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemOpenActionPerformed
         ma.abrirDocumento(jTabbedPane.getComponentCount());
     }//GEN-LAST:event_jMenuItemOpenActionPerformed
 
+    private void jMenuItemSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemSaveAsActionPerformed
+        ma.guardarArchivoComo(0,0);
+    }//GEN-LAST:event_jMenuItemSaveAsActionPerformed
 
+    private void jMenuItemCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCopyActionPerformed
+        
+    }//GEN-LAST:event_jMenuItemCopyActionPerformed
+
+    private void jMenuItemPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPasteActionPerformed
+        
+    }//GEN-LAST:event_jMenuItemPasteActionPerformed
+
+     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
