@@ -1,10 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package analizador.archivos.frontend;
 
+import analizador.archivos.frontend.*;
 import java.io.File;
 import javax.swing.JFileChooser;
 
@@ -12,14 +8,13 @@ import javax.swing.JFileChooser;
  *
  * @author fabricio
  */
-public class GuardadorArchivo extends javax.swing.JDialog {
+public class SeleccionadorArchivo extends javax.swing.JDialog {
 
     private File direccion = null;
-
     /**
      * Creates new form exportadorHTML
      */
-    public GuardadorArchivo(java.awt.Frame parent, boolean modal) {
+    public SeleccionadorArchivo(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         this.setTitle("Guardar archivo como");
@@ -42,9 +37,8 @@ public class GuardadorArchivo extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
-        chooser.setDialogType(javax.swing.JFileChooser.SAVE_DIALOG);
-        chooser.setApproveButtonText("Guardar");
-        chooser.setApproveButtonToolTipText("Guardar");
+        chooser.setApproveButtonText("Abrir");
+        chooser.setApproveButtonToolTipText("Abrir archivo seleccionado");
         chooser.setCurrentDirectory(new java.io.File("/"));
         chooser.setDialogTitle("algo");
         chooser.setName(""); // NOI18N
@@ -56,10 +50,10 @@ public class GuardadorArchivo extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Open Sans", 0, 24)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(1, 1, 136));
-        jLabel1.setText("Guardar como");
+        jLabel1.setText("Abrir como");
 
         jLabel2.setFont(new java.awt.Font("Open Sans", 1, 12)); // NOI18N
-        jLabel2.setText("Seleccione la direccion y el nombre del archivo que desea guardar");
+        jLabel2.setText("Seleccione la direccion y el nombre del archivo que desea abrir");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -68,18 +62,19 @@ public class GuardadorArchivo extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jSeparator1))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(29, 29, 29)
-                .addComponent(chooser, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(32, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(75, 75, 75))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(190, 190, 190))
+                .addGap(212, 212, 212))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(29, 29, 29)
+                        .addComponent(chooser, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(92, 92, 92)
+                        .addComponent(jLabel2)))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -88,9 +83,9 @@ public class GuardadorArchivo extends javax.swing.JDialog {
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(chooser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29))
         );
@@ -112,8 +107,9 @@ public class GuardadorArchivo extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_chooserActionPerformed
 
-    public File getFile() {
+        public File getFile(){
         return this.direccion;
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

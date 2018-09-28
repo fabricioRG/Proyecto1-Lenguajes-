@@ -27,7 +27,7 @@ public class ManejadorAnalizador {
     
     public void abrirDocumento(){
         ManejadorArchivos ma = new ManejadorArchivos();
-        ma.obtenerTextoDeArchivo("‪C:\\Users\\fabri\\Documents\\Algoritmos metodos ordenacion.txt");
+        ma.obtenerTextoDeArchivo("/home/fabricio/Documents/algo/algo.txt");
     }
     
     public void cerrarVentana(int ventana){
