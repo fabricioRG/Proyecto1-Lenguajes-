@@ -24,21 +24,6 @@ public class ManejadorAnalizador {
         this.analizador = analizador;
         
     }
-
-    public void keyReleased(KeyEvent e) {
-        
-        System.out.println("Soltó la tecla:  " + e.getKeyText(e.getKeyCode()));
-//        if (e.getSource() == areaEntradaDeTexto) {
-//            if (e.VK_ESCAPE == e.getKeyCode()) {
-//                int respuesta = JOptionPane.showConfirmDialog(this,
-//                        "Esta seguro que desea salir?", "Confirmación",
-//                        JOptionPane.YES_NO_OPTION);
-//                if (respuesta == JOptionPane.YES_NO_OPTION) {
-//                    System.exit(0);
-//                }
-//            }
-//        }
-    }
     
     public void agregarVentana() {
         AreaTexto at = new AreaTexto();
@@ -87,7 +72,6 @@ public class ManejadorAnalizador {
     public void cerrarVentana(int ventana) {
         AreaTexto at = (AreaTexto) analizador.jTabbedPane.getSelectedComponent();
         String texto = at.getjEditorPane1().getText();
-        System.out.println(texto);
         analizador.jTabbedPane.remove(ventana);
         estadoGuardar();
     }

@@ -1,5 +1,6 @@
 package analizador.analizadorlexico.frontend;
 
+import analizador.analizadorlexico.backend.ManejadorAreaTexto;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -10,9 +11,10 @@ import javax.swing.JEditorPane;
  *
  * @author fabricio
  */
-public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseListener{
+public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseListener {
 
     public String textoIngresado = "";
+    private ManejadorAreaTexto mat = null;
 
     /**
      * Creates new form AreaTexto
@@ -21,6 +23,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         initComponents();
         jEditorPaneTexto.addKeyListener(this);
         jEditorPaneTexto.addMouseListener(this);
+        mat = new ManejadorAreaTexto(this);
     }
 
     /**
@@ -35,6 +38,10 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPaneTexto = new javax.swing.JEditorPane();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabelColummna = new javax.swing.JLabel();
+        jLabelLinea = new javax.swing.JLabel();
 
         setPreferredSize(new java.awt.Dimension(844, 455));
 
@@ -42,25 +49,52 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jEditorPaneTexto.setContentType("text/html"); // NOI18N
         jEditorPaneTexto.setFont(new java.awt.Font("Caviar Dreams", 0, 12)); // NOI18N
         jEditorPaneTexto.setForeground(new java.awt.Color(254, 254, 254));
-        jEditorPaneTexto.setText("<html>\n  <head>\n  </head>\n  <body style=\"color:white;font-family:Open Sans Light;padding:3px;\">\n  </body>\n</html>\n");
+        jEditorPaneTexto.setText("<html>\n<head>\n</head>\n<body style=\"color:white;font-family:Open Sans Light;padding:4px;\">\n<pre>\n</pre>\n</body>\n</html>\n");
+        jEditorPaneTexto.setToolTipText("");
         jEditorPaneTexto.setCaretColor(new java.awt.Color(254, 254, 254));
         jScrollPane1.setViewportView(jEditorPaneTexto);
+
+        jLabel1.setFont(new java.awt.Font("Open Sans", 1, 12)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(2, 36, 61));
+        jLabel1.setText("Linea:");
+
+        jLabel2.setFont(new java.awt.Font("Open Sans", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(2, 36, 61));
+        jLabel2.setText("Columna:");
+
+        jLabelColummna.setForeground(new java.awt.Color(2, 36, 61));
+        jLabelColummna.setText(" ");
+
+        jLabelLinea.setForeground(new java.awt.Color(2, 36, 61));
+        jLabelLinea.setText(" ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 844, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelColummna, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 634, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, 0)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 455, Short.MAX_VALUE)
-                .addGap(0, 0, 0))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabelColummna)
+                    .addComponent(jLabelLinea))
+                .addGap(6, 6, 6))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -89,7 +123,8 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
 
     @Override
     public void keyReleased(KeyEvent e) {
-        System.out.println(jEditorPaneTexto.getText());
+        jLabelColummna.setText(Integer.toString(mat.getColumn()));
+        jLabelLinea.setText(Integer.toString(mat.getLine()));
     }
 
     @Override
@@ -98,7 +133,8 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println(jEditorPaneTexto.getText());
+        jLabelColummna.setText(Integer.toString(mat.getColumn()));
+        jLabelLinea.setText(Integer.toString(mat.getLine()));
     }
 
     @Override
@@ -120,12 +156,15 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     public void mouseExited(MouseEvent e) {
 
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JEditorPane jEditorPaneTexto;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabelColummna;
+    private javax.swing.JLabel jLabelLinea;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 
-    
 }
