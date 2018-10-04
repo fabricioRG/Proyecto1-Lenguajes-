@@ -96,5 +96,16 @@ public class AsciiValues {
     public static final int Z_LOW = 122;
     public static final int LLAVE_IZQUIERDA = 123;
     public static final int LLAVE_DERECHA = 125;
+    public static final String TOKEN_NUMERO_ENTERO = "Numero entero";
+    public static final String TOKEN_NUMERO_DECIMAL = "Numero decimal";
+    public static final String TOKEN_IDENTIFICADOR = "Identificador";
+    public static final String TOKEN_PALABRA_RESERVADA = "Palabra reservada";
+    public static final String TOKEN_LITERAL = "Literal";
+    public static final String TOKEN_SIGNO_PUNTUACION = "Signo de puntuacion";
+    public static final String TOKEN_OPERADOR_ARITMETICO = "Operador aritmetico";
+    public static final String TOKEN_SIGNO_AGRUPACION = "Signo de agrupacion";
+    public static final String TOKEN_COMENTARIO_UNA_LINEA = "Comentario de una sola linea";
+    public static final String TOKEN_COMENTARIO_BLOQUE = "Signo en bloque";
+    public static final String TOKEN_CARACTER_ESPECIAL = "Caracter especial";
     
 }

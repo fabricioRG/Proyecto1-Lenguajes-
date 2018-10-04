@@ -4,7 +4,6 @@ import analizador.archivos.frontend.GuardadorArchivo;
 import analizador.analizadorlexico.frontend.*;
 import analizador.archivos.backend.ManejadorArchivos;
 import analizador.archivos.frontend.SeleccionadorArchivo;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import javax.swing.ImageIcon;
@@ -55,7 +54,7 @@ public class ManejadorAnalizador {
                 if (!error) {
                     try {
                         ManejadorArchivos ma = new ManejadorArchivos();
-                        agregarVentana(archivo.getAbsolutePath(), ma.obtenerTextoDeArchivo(archivo));
+                        agregarVentana(archivo.getAbsolutePath(), ma.obtenerTextoDeArchivoEnHtml(archivo));
                     } catch (FileNotFoundException e) {
                         JOptionPane.showMessageDialog(analizador, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     } catch (Exception e) {
@@ -75,7 +74,7 @@ public class ManejadorAnalizador {
         analizador.jTabbedPane.remove(ventana);
         estadoGuardar();
     }
-
+    
     public void guardarArchivo(int i) {
         if (analizador.jTabbedPane.getTitleAt(i).equals(NEW_TAB)) {
             guardarArchivoComo(i, 1);
@@ -118,7 +117,7 @@ public class ManejadorAnalizador {
         if (file != null) {
             try {
                 ManejadorArchivos ma = new ManejadorArchivos();
-                ma.escribirArchivoTexto(file, at.getjEditorPane1().getText());
+                ma.escribirArchivoTexto(file, at.getMat().getPlainText());
                 JOptionPane.showMessageDialog(analizador, "Se ha guardado correctamente el archivo \"" + path
                         + "\"", "Accion exitosa", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {

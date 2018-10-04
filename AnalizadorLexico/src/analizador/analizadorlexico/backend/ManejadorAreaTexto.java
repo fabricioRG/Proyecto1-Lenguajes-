@@ -2,6 +2,7 @@ package analizador.analizadorlexico.backend;
 
 import analizador.analizadorlexico.frontend.AreaTexto;
 import analizador.automatas.AsciiValues;
+import analizador.automatas.Automatas;
 import analizador.automatas.TextoAnalizar;
 import javax.swing.JEditorPane;
 import javax.swing.text.Document;
@@ -22,7 +23,12 @@ public class ManejadorAreaTexto extends AsciiValues {
         this.at = at;
     }
 
-    private String getPlainText() {
+    public void iniciarAutomata(){
+        Automatas aut = new Automatas();
+        aut.iniciarAFD();
+    }
+    
+    public String getPlainText() {
         Source htmlSource = new Source(at.getjEditorPane1().getText());
         Segment htmlSeg = new Segment(htmlSource, 0, htmlSource.length());
         Renderer htmlRend = new Renderer(htmlSeg);

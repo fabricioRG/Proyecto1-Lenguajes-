@@ -6,6 +6,12 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.JEditorPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.event.UndoableEditEvent;
+import javax.swing.event.UndoableEditListener;
+import javax.swing.undo.CannotRedoException;
+import javax.swing.undo.UndoManager;
 
 /**
  *
@@ -15,6 +21,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
 
     public String textoIngresado = "";
     private ManejadorAreaTexto mat = null;
+    private UndoManager undoManager = null;
 
     /**
      * Creates new form AreaTexto
@@ -24,6 +31,41 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jEditorPaneTexto.addKeyListener(this);
         jEditorPaneTexto.addMouseListener(this);
         mat = new ManejadorAreaTexto(this);
+        undoManager = new UndoManager();
+        jPanelErrores.setVisible(false);
+        jButtonRedo.setEnabled(false);
+        jButtonUndo.setEnabled(false);
+        jEditorPaneTexto.getDocument().addUndoableEditListener(new UndoableEditListener() {
+            public void undoableEditHappened(UndoableEditEvent e) {
+            undoManager.addEdit(e.getEdit());
+            updateButtons();
+          }
+        });
+        
+        jButtonUndo.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        try {
+          undoManager.undo();
+        } catch (CannotRedoException cre) {
+          cre.printStackTrace();
+        }
+        updateButtons();
+      }
+    });
+ 
+    jButtonRedo.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        try {
+          undoManager.redo();
+        } catch (CannotRedoException cre) {
+          cre.printStackTrace();
+        }
+        updateButtons();
+      }
+    });
+    
+    
+    
     }
 
     /**
@@ -42,16 +84,26 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jLabel2 = new javax.swing.JLabel();
         jLabelColummna = new javax.swing.JLabel();
         jLabelLinea = new javax.swing.JLabel();
+        jPanelErrores = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTableErrores = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        jButtonUndo = new javax.swing.JButton();
+        jButtonRedo = new javax.swing.JButton();
+        jButtonCopy = new javax.swing.JButton();
+        jButtonPaste = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(844, 455));
 
         jEditorPaneTexto.setBackground(new java.awt.Color(2, 36, 61));
+        jEditorPaneTexto.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
         jEditorPaneTexto.setContentType("text/html"); // NOI18N
         jEditorPaneTexto.setFont(new java.awt.Font("Caviar Dreams", 0, 12)); // NOI18N
         jEditorPaneTexto.setForeground(new java.awt.Color(254, 254, 254));
         jEditorPaneTexto.setText("<html>\n<head>\n</head>\n<body style=\"color:white;font-family:Open Sans Light;padding:4px;\">\n<pre>\n</pre>\n</body>\n</html>\n");
         jEditorPaneTexto.setToolTipText("");
         jEditorPaneTexto.setCaretColor(new java.awt.Color(254, 254, 254));
+        jEditorPaneTexto.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
         jScrollPane1.setViewportView(jEditorPaneTexto);
 
         jLabel1.setFont(new java.awt.Font("Open Sans", 1, 12)); // NOI18N
@@ -68,11 +120,80 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jLabelLinea.setForeground(new java.awt.Color(2, 36, 61));
         jLabelLinea.setText(" ");
 
+        jPanelErrores.setBackground(new java.awt.Color(2, 36, 61));
+        jPanelErrores.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
+
+        jTableErrores.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Linea", "Columna"
+            }
+        ));
+        jScrollPane2.setViewportView(jTableErrores);
+
+        jLabel3.setFont(new java.awt.Font("Caviar Dreams", 0, 18)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(254, 254, 254));
+        jLabel3.setText("Lexemas invalidos");
+
+        javax.swing.GroupLayout jPanelErroresLayout = new javax.swing.GroupLayout(jPanelErrores);
+        jPanelErrores.setLayout(jPanelErroresLayout);
+        jPanelErroresLayout.setHorizontalGroup(
+            jPanelErroresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelErroresLayout.createSequentialGroup()
+                .addContainerGap(17, Short.MAX_VALUE)
+                .addGroup(jPanelErroresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelErroresLayout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelErroresLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(25, 25, 25))))
+        );
+        jPanelErroresLayout.setVerticalGroup(
+            jPanelErroresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelErroresLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jButtonUndo.setBackground(new java.awt.Color(219, 32, 28));
+        jButtonUndo.setForeground(new java.awt.Color(254, 254, 254));
+        jButtonUndo.setText("Undo");
+
+        jButtonRedo.setBackground(new java.awt.Color(55, 162, 201));
+        jButtonRedo.setForeground(new java.awt.Color(254, 254, 254));
+        jButtonRedo.setText("Redo");
+
+        jButtonCopy.setBackground(new java.awt.Color(255, 171, 0));
+        jButtonCopy.setForeground(new java.awt.Color(254, 254, 254));
+        jButtonCopy.setText("Copy");
+        jButtonCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonCopyActionPerformed(evt);
+            }
+        });
+
+        jButtonPaste.setBackground(new java.awt.Color(37, 110, 192));
+        jButtonPaste.setForeground(new java.awt.Color(254, 254, 254));
+        jButtonPaste.setText("Paste");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addComponent(jScrollPane1)
+                .addGap(0, 0, 0)
+                .addComponent(jPanelErrores, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -81,20 +202,36 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelColummna, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 634, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(46, 46, 46)
+                .addComponent(jButtonCopy)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonPaste)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 285, Short.MAX_VALUE)
+                .addComponent(jButtonUndo)
+                .addGap(18, 18, 18)
+                .addComponent(jButtonRedo)
+                .addGap(28, 28, 28))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanelErrores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(4, 4, 4)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel1)
                     .addComponent(jLabelColummna)
-                    .addComponent(jLabelLinea))
-                .addGap(6, 6, 6))
+                    .addComponent(jLabelLinea)
+                    .addComponent(jButtonUndo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRedo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButtonCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonPaste, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, 0))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -109,12 +246,24 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButtonCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCopyActionPerformed
+        mat.iniciarAutomata();
+    }//GEN-LAST:event_jButtonCopyActionPerformed
+
     public JEditorPane getjEditorPane1() {
         return jEditorPaneTexto;
     }
 
     public void setjEditorPane1(JEditorPane jEditorPane1) {
         this.jEditorPaneTexto = jEditorPane1;
+    }
+
+    public ManejadorAreaTexto getMat() {
+        return mat;
+    }
+
+    public void setMat(ManejadorAreaTexto mat) {
+        this.mat = mat;
     }
 
     @Override
@@ -156,15 +305,31 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     public void mouseExited(MouseEvent e) {
 
     }
+    
+    //Metodo encargado de actualizar el estado de los botones segun "Undo Manager"
+    public void updateButtons(){
+//        jButtonUndo.setText(undoManager.getUndoPresentationName());
+//        jButtonRedo.setText(undoManager.getRedoPresentationName());
+        jButtonUndo.setEnabled(undoManager.canUndo());
+        jButtonRedo.setEnabled(undoManager.canRedo());
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonCopy;
+    private javax.swing.JButton jButtonPaste;
+    private javax.swing.JButton jButtonRedo;
+    private javax.swing.JButton jButtonUndo;
     private javax.swing.JEditorPane jEditorPaneTexto;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabelColummna;
     private javax.swing.JLabel jLabelLinea;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanelErrores;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTableErrores;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -38,8 +38,6 @@ public class Analizador extends javax.swing.JFrame {
         jMenuItemSaveAs = new javax.swing.JMenuItem();
         jMenuItemCloseTab = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItemUndo = new javax.swing.JMenuItem();
-        jMenuItemRedo = new javax.swing.JMenuItem();
         jMenuItemCopy = new javax.swing.JMenuItem();
         jMenuItemPaste = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
@@ -49,16 +47,18 @@ public class Analizador extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizador Lexico");
 
+        jTabbedPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+            .addComponent(jTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1085, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -107,12 +107,6 @@ public class Analizador extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
-
-        jMenuItemUndo.setText("Undo");
-        jMenu2.add(jMenuItemUndo);
-
-        jMenuItemRedo.setText("Redo");
-        jMenu2.add(jMenuItemRedo);
 
         jMenuItemCopy.setText("Copy");
         jMenuItemCopy.addActionListener(new java.awt.event.ActionListener() {
@@ -217,10 +211,8 @@ public class Analizador extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemNew;
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemPaste;
-    private javax.swing.JMenuItem jMenuItemRedo;
     public javax.swing.JMenuItem jMenuItemSave;
     public javax.swing.JMenuItem jMenuItemSaveAs;
-    private javax.swing.JMenuItem jMenuItemUndo;
     private javax.swing.JPanel jPanel1;
     public javax.swing.JTabbedPane jTabbedPane;
     // End of variables declaration//GEN-END:variables

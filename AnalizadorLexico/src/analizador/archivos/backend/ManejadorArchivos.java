@@ -30,6 +30,22 @@ public class ManejadorArchivos {
         return texto;
     }
 
+    //Metodo que se encarga de mandar a traer el texto cargado de archivo y convertirlo en html
+    public String obtenerTextoDeArchivoEnHtml(File archivo) throws FileNotFoundException, Exception {
+        String textoSimple = obtenerTextoDeArchivo(archivo);
+        String textoFinal = "<html>\n"
+                + "<head>\n"
+                + "</head>\n"
+                + "<body style=\"color:white;font-family:Open Sans Light;padding:4px;\">\n"
+                + "<pre>\n"
+                + textoSimple
+                + "</pre>\n"
+                + "</body>\n"
+                + "</html>\n"
+                + "";
+        return textoFinal;
+    }
+
     //Metodo encargado de escribir en un archivo de texto el texto recibido como parametro
     public void escribirArchivoTexto(File archivo, String texto) throws Exception {
         FileWriter fichero = null;
