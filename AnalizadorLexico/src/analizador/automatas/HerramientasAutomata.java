@@ -4,17 +4,51 @@ package analizador.automatas;
  *
  * @author fabricio
  */
-public class AsciiValues {
+public class HerramientasAutomata {
 
-    public AsciiValues(){    
+    public HerramientasAutomata() {
     }
-    
+
+    public boolean esDigitoDiferenteCero(char c) {
+        return c == UNO || c == DOS || c == TRES || c == CUATRO || c == CINCO || c == SEIS || c == SIETE 
+                || c == OCHO || c == NUEVE;
+    }
+
+    public boolean esDigito(char c) {
+        return esDigitoDiferenteCero(c) || esCero(c);
+    }
+
+    public boolean esCero(char c) {
+        return c == CERO;
+    }
+
+    public boolean esEspacio(char c) {
+        return c == SALTO_LINEA || c == TAB || c == ESPACIO || c == SALTO_PAGINA || c == RETORNO_CARRITO;
+    }
+
+    public boolean esSumaResta(char c) {
+        return c == CRUZ || c == GUION;
+    }
+
+    public boolean esOperadorAritmetico(char c) {
+        return esSumaResta(c) || c == DIAGONAL || c == ASTERISCO || c == MODULO;
+    }
+
+    public boolean esSignoPuntuacion(char c) {
+        return c == PUNTO || c == COMA || c == DOS_PUNTOS || c == PUNTO_Y_COMA;
+    }
+
+    public boolean esSignoAgrupacion(char c) {
+        return c == PARENTESIS_IZQUIERDO || c == PARENTESIS_DERECHO || c == CORCHETE_IZQUIERDO || c == CORCHETE_DERECHO
+                || c == LLAVE_IZQUIERDA || c == LLAVE_DERECHA;
+    }
     public static final int TAB = 9;
     public static final int SALTO_LINEA = 10;
     public static final int SALTO_PAGINA = 12;
     public static final int RETORNO_CARRITO = 13;
     public static final int ESPACIO = 32;
     public static final int COMILLAS = 34;
+    public static final int MODULO = 37;
     public static final int PARENTESIS_IZQUIERDO = 40;
     public static final int PARENTESIS_DERECHO = 41;
     public static final int ASTERISCO = 42;
@@ -53,7 +87,7 @@ public class AsciiValues {
     public static final int M = 77;
     public static final int N = 78;
     public static final int O = 79;
-    public static final int P =80;
+    public static final int P = 80;
     public static final int Q = 81;
     public static final int R = 82;
     public static final int S = 83;
@@ -77,9 +111,9 @@ public class AsciiValues {
     public static final int G_LOW = 103;
     public static final int H_LOW = 104;
     public static final int I_LOW = 105;
-    public static final int J_LOW= 106;
+    public static final int J_LOW = 106;
     public static final int K_LOW = 107;
-    public static final int L_LOW= 108;
+    public static final int L_LOW = 108;
     public static final int M_LOW = 109;
     public static final int N_LOW = 110;
     public static final int O_LOW = 111;
@@ -107,5 +141,6 @@ public class AsciiValues {
     public static final String TOKEN_COMENTARIO_UNA_LINEA = "Comentario de una sola linea";
     public static final String TOKEN_COMENTARIO_BLOQUE = "Signo en bloque";
     public static final String TOKEN_CARACTER_ESPECIAL = "Caracter especial";
-    
+    public static final String TOKEN_ERROR = "Error";
+
 }

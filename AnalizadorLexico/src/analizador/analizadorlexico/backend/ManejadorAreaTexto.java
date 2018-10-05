@@ -1,8 +1,8 @@
 package analizador.analizadorlexico.backend;
 
 import analizador.analizadorlexico.frontend.AreaTexto;
-import analizador.automatas.AsciiValues;
-import analizador.automatas.Automatas;
+import analizador.automatas.HerramientasAutomata;
+import analizador.automatas.Automata;
 import analizador.automatas.TextoAnalizar;
 import javax.swing.JEditorPane;
 import javax.swing.text.Document;
@@ -15,7 +15,7 @@ import org.jsoup.Jsoup;
  *
  * @author fabricio
  */
-public class ManejadorAreaTexto extends AsciiValues {
+public class ManejadorAreaTexto extends HerramientasAutomata {
 
     private AreaTexto at = null;
 
@@ -24,8 +24,8 @@ public class ManejadorAreaTexto extends AsciiValues {
     }
 
     public void iniciarAutomata(){
-        Automatas aut = new Automatas();
-        aut.iniciarAFD();
+        Automata aut = new Automata();
+        aut.iniciarAFD(getPlainText());
     }
     
     public String getPlainText() {

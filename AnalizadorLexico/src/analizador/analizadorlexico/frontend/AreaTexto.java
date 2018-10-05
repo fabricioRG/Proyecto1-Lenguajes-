@@ -32,9 +32,11 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jEditorPaneTexto.addMouseListener(this);
         mat = new ManejadorAreaTexto(this);
         undoManager = new UndoManager();
-        jPanelErrores.setVisible(false);
-        jButtonRedo.setEnabled(false);
+        jPanelErrores.setVisible(false); //Panel no visible hasta que se encuentre un error o se llame por aparte
+        jButtonRedo.setEnabled(false); //Botones desabilitados hasta que se escriba en el area de texto
         jButtonUndo.setEnabled(false);
+        
+        //Funciones que implementan la funcion "Rehacer" y "Deshacer"
         jEditorPaneTexto.getDocument().addUndoableEditListener(new UndoableEditListener() {
             public void undoableEditHappened(UndoableEditEvent e) {
             undoManager.addEdit(e.getEdit());
@@ -63,9 +65,6 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         updateButtons();
       }
     });
-    
-    
-    
     }
 
     /**
@@ -272,8 +271,9 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
 
     @Override
     public void keyReleased(KeyEvent e) {
-        jLabelColummna.setText(Integer.toString(mat.getColumn()));
-        jLabelLinea.setText(Integer.toString(mat.getLine()));
+        jLabelColummna.setText(Integer.toString(mat.getColumn())); //Funcion encargada de obtener la columna del cursor
+        jLabelLinea.setText(Integer.toString(mat.getLine())); //Funcion encargada de obtener la linea del cursor
+        mat.iniciarAutomata(); //Metodo encargado de iniciar el automata
     }
 
     @Override
@@ -282,8 +282,8 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        jLabelColummna.setText(Integer.toString(mat.getColumn()));
-        jLabelLinea.setText(Integer.toString(mat.getLine()));
+        jLabelColummna.setText(Integer.toString(mat.getColumn())); //Funcion encargada de obtener la columna del cursor
+        jLabelLinea.setText(Integer.toString(mat.getLine())); //Funcion encargada de obtener la linea del cursor
     }
 
     @Override
@@ -308,8 +308,6 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     
     //Metodo encargado de actualizar el estado de los botones segun "Undo Manager"
     public void updateButtons(){
-//        jButtonUndo.setText(undoManager.getUndoPresentationName());
-//        jButtonRedo.setText(undoManager.getRedoPresentationName());
         jButtonUndo.setEnabled(undoManager.canUndo());
         jButtonRedo.setEnabled(undoManager.canRedo());
     }
