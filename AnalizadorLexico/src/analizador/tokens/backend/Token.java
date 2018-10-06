@@ -8,14 +8,14 @@ public class Token {
 
 private String nombreToken;
 private String lexema;
-private int fila;
 private int colummna;
+private int fila;
 
-    public Token(String nombreToken, String lexema, int fila, int colummna) {
+    public Token(String nombreToken, String lexema, int colummna, int fila) {
         this.nombreToken = nombreToken;
         this.lexema = lexema;
-        this.fila = fila;
         this.colummna = colummna;
+        this.fila = fila;
     }
 
     public String getNombreToken() {
@@ -34,6 +34,14 @@ private int colummna;
         this.lexema = lexema;
     }
 
+    public int getColummna() {
+        return colummna;
+    }
+
+    public void setColummna(int colummna) {
+        this.colummna = colummna;
+    }
+
     public int getFila() {
         return fila;
     }
@@ -42,12 +50,6 @@ private int colummna;
         this.fila = fila;
     }
 
-    public int getColummna() {
-        return colummna;
-    }
 
-    public void setColummna(int colummna) {
-        this.colummna = colummna;
-    }
-    
+
 }

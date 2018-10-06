@@ -39,6 +39,7 @@ public class ManejadorArchivos {
                 + "<body style=\"color:white;font-family:Open Sans Light;padding:4px;\">\n"
                 + "<pre>\n"
                 + textoSimple
+//                + "<span class=\"highlight\" style=\"background-color:#009933;\">texto</span>"
                 + "</pre>\n"
                 + "</body>\n"
                 + "</html>\n"

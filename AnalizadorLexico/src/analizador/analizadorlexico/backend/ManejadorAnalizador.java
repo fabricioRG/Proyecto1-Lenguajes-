@@ -21,9 +21,9 @@ public class ManejadorAnalizador {
 
     public ManejadorAnalizador(Analizador analizador) {
         this.analizador = analizador;
-        
+
     }
-    
+
     public void agregarVentana() {
         AreaTexto at = new AreaTexto();
         analizador.jTabbedPane.add(NEW_TAB, at);
@@ -69,12 +69,10 @@ public class ManejadorAnalizador {
     }
 
     public void cerrarVentana(int ventana) {
-        AreaTexto at = (AreaTexto) analizador.jTabbedPane.getSelectedComponent();
-        String texto = at.getjEditorPane1().getText();
         analizador.jTabbedPane.remove(ventana);
         estadoGuardar();
     }
-    
+
     public void guardarArchivo(int i) {
         if (analizador.jTabbedPane.getTitleAt(i).equals(NEW_TAB)) {
             guardarArchivoComo(i, 1);
@@ -138,4 +136,9 @@ public class ManejadorAnalizador {
         analizador.jMenuItemSaveAs.setEnabled(estado);
     }
 
+    public void mostrarTokens(){
+        AreaTexto at = (AreaTexto) analizador.jTabbedPane.getSelectedComponent();
+        at.mostrarTokens();
+    }
+    
 }

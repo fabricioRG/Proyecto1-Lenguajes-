@@ -10,7 +10,7 @@ public class HerramientasAutomata {
     }
 
     public boolean esDigitoDiferenteCero(char c) {
-        return c == UNO || c == DOS || c == TRES || c == CUATRO || c == CINCO || c == SEIS || c == SIETE 
+        return c == UNO || c == DOS || c == TRES || c == CUATRO || c == CINCO || c == SEIS || c == SIETE
                 || c == OCHO || c == NUEVE;
     }
 
@@ -42,6 +42,20 @@ public class HerramientasAutomata {
         return c == PARENTESIS_IZQUIERDO || c == PARENTESIS_DERECHO || c == CORCHETE_IZQUIERDO || c == CORCHETE_DERECHO
                 || c == LLAVE_IZQUIERDA || c == LLAVE_DERECHA;
     }
+
+    public boolean esLetraMayuscula(char c) {
+        return c == A || c == B || c == C || c == D || c == E || c == F || c == G || c == H || c == I || c == J || c == K || c == L
+                || c == M || c == N || c == O || c == P || c == Q || c == R || c == S || c == T || c == U || c == V || c == W
+                || c == X || c == Y || c == Z;
+    }
+
+    public boolean esLetraMinuscula(char c) {
+        return c == A_LOW || c == B_LOW || c == C_LOW || c == D_LOW || c == E_LOW || c == F_LOW || c == G_LOW 
+                || c == H_LOW || c == I_LOW || c == J_LOW || c == K_LOW || c == L_LOW || c == M_LOW || c == N_LOW 
+                || c == O_LOW || c == P_LOW || c == Q_LOW || c == R_LOW || c == S_LOW || c == T_LOW || c == U_LOW 
+                || c == V_LOW || c == W_LOW || c == X_LOW || c == Y_LOW || c == Z_LOW;
+    }
+    
     public static final int TAB = 9;
     public static final int SALTO_LINEA = 10;
     public static final int SALTO_PAGINA = 12;
@@ -138,8 +152,8 @@ public class HerramientasAutomata {
     public static final String TOKEN_SIGNO_PUNTUACION = "Signo de puntuacion";
     public static final String TOKEN_OPERADOR_ARITMETICO = "Operador aritmetico";
     public static final String TOKEN_SIGNO_AGRUPACION = "Signo de agrupacion";
-    public static final String TOKEN_COMENTARIO_UNA_LINEA = "Comentario de una sola linea";
-    public static final String TOKEN_COMENTARIO_BLOQUE = "Signo en bloque";
+    public static final String TOKEN_COMENTARIO_UNA_LINEA = "Comentario de una linea";
+    public static final String TOKEN_COMENTARIO_BLOQUE = "Comentario en bloque";
     public static final String TOKEN_CARACTER_ESPECIAL = "Caracter especial";
     public static final String TOKEN_ERROR = "Error";
 

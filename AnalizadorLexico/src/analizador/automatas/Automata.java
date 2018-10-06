@@ -1,7 +1,9 @@
 package analizador.automatas;
 
+import analizador.analizadorlexico.backend.ManejadorAreaTexto;
 import java.util.List;
 import java.util.LinkedList;
+import analizador.tokens.backend.*;
 
 /**
  *
@@ -14,21 +16,34 @@ public class Automata extends HerramientasAutomata {
     private String fuente = "";
     private String lexema = "";
     private char caracter;
+    private int posicionInicial = 0;
+    private int filaActual = 0;
     private List<String> listaLexema;
     private List<String> listaToken;
+    private List<Token> listaTokens;
+    private List<ErrorLexema> listaErrores;
+    private ManejadorAreaTexto mat = null;
 
-    public Automata() {
-        listaLexema = new LinkedList<>();
-        listaToken = new LinkedList<>();
+    public Automata(ManejadorAreaTexto mat) {
+        this.listaLexema = new LinkedList<>();
+        this.listaToken = new LinkedList<>();
+        this.listaTokens = new LinkedList<>();
+        this.listaErrores = new LinkedList<>();
+        this.mat = mat;
     }
 
+    //Metodo que inica el AUTOMATA FINITO DETERMINISTA
     public void iniciarAFD(String textoEntrada) {
-        estado = 0;
-        posicion = 0;
-        lexema = "";
-        listaLexema.clear();
-        listaToken.clear();
-        fuente = textoEntrada;
+        this.estado = 0;
+        this.posicion = 0;
+        this.lexema = "";
+        this.posicionInicial = 1;
+        this.filaActual = 1;
+        this.listaLexema.clear();
+        this.listaToken.clear();
+        this.listaTokens.clear();
+        this.listaErrores.clear();
+        this.fuente = textoEntrada;
 
         if (textoEntrada.length() > 0) {
             iniciarProceso();
@@ -40,8 +55,13 @@ public class Automata extends HerramientasAutomata {
         caracter = fuente.charAt(posicion);
         switch (estado) {
             case 0: {
-                if (esEspacio(caracter)) {
+                if(caracter == SALTO_LINEA){
                     lexema = "";
+                    filaActual++;
+                    posicionInicial = 1;
+                } else if (esEspacio(caracter)) {
+                    lexema = "";
+                    posicionInicial++;
                 } else if (esCero(caracter)) {
                     lexema += Character.toString(caracter);
                     estado = 1;
@@ -52,11 +72,11 @@ public class Automata extends HerramientasAutomata {
                     lexema += Character.toString(caracter);
                     estado = 3;
                 } else if (caracter == ASTERISCO || caracter == MODULO) {
-                    addList(lexema, TOKEN_OPERADOR_ARITMETICO);
+                    addToken(Character.toString(caracter), TOKEN_OPERADOR_ARITMETICO);
                 } else if (esSignoPuntuacion(caracter)) {
-                    addList(lexema, TOKEN_SIGNO_PUNTUACION);
+                    addToken(Character.toString(caracter), TOKEN_SIGNO_PUNTUACION);
                 } else if (esSignoAgrupacion(caracter)) {
-                    addList(lexema, TOKEN_SIGNO_AGRUPACION);
+                    addToken(Character.toString(caracter), TOKEN_SIGNO_AGRUPACION);
                 } else if (caracter == DIAGONAL) {
                     lexema += Character.toString(caracter);
                     estado = 14;
@@ -64,7 +84,7 @@ public class Automata extends HerramientasAutomata {
                     lexema += Character.toString(caracter);
                     estado = 19;
                 } else {
-                    error();
+                    errorInNextCharacter();
                 }
                 break;
             }
@@ -73,10 +93,10 @@ public class Automata extends HerramientasAutomata {
                     lexema += Character.toString(caracter);
                     estado = 5;
                 } else if (!esDigito(caracter)) {
-                    addList(lexema, TOKEN_NUMERO_ENTERO);
+                    addToken(lexema, TOKEN_NUMERO_ENTERO);
                     nuevoLexema();
                 } else {
-                    error();
+                    errorInNextCharacter();
                 }
                 break;
             }
@@ -87,7 +107,7 @@ public class Automata extends HerramientasAutomata {
                     lexema += Character.toString(caracter);
                     estado = 6;
                 } else {
-                    addList(lexema, TOKEN_NUMERO_ENTERO);
+                    addToken(lexema, TOKEN_NUMERO_ENTERO);
                     nuevoLexema();
                 }
                 break;
@@ -96,8 +116,147 @@ public class Automata extends HerramientasAutomata {
                 if (esDigitoDiferenteCero(caracter)) {
                     lexema += Character.toString(caracter);
                     estado = 2;
+                } else if (esCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 4;
                 } else {
-                    error();
+                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                    nuevoLexema();
+                }
+                break;
+            }
+            case 4: {
+                if (caracter == PUNTO) {
+                    lexema += Character.toString(caracter);
+                    estado = 5;
+                } else {
+                    errorInNextCharacter();
+                }
+                break;
+            }
+            case 5: {
+                if (esCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 7;
+                } else if (esDigitoDiferenteCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 8;
+                } else {
+                    errorInCurrentCharacter();
+                }
+                break;
+            }
+            case 6: {
+                if (esCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 9;
+                } else if (esDigitoDiferenteCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 8;
+                } else {
+                    errorInCurrentCharacter();
+                }
+                break;
+            }
+            case 7: {
+                if (esDigitoDiferenteCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 8;
+                } else if (esCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 10;
+                } else {
+                    addToken(lexema, TOKEN_NUMERO_DECIMAL);
+                    nuevoLexema();
+                }
+                break;
+            }
+            case 8: {
+                if (esDigito(caracter)) {
+                    lexema += Character.toString(caracter);
+                } else {
+                    addToken(lexema, TOKEN_NUMERO_DECIMAL);
+                    nuevoLexema();
+                }
+                break;
+            }
+            case 9: {
+                if (esDigitoDiferenteCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 8;
+                } else if (esCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 7;
+                } else {
+                    addToken(lexema, TOKEN_NUMERO_DECIMAL);
+                    nuevoLexema();
+                }
+                break;
+            }
+            case 10: {
+                if (esCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                } else if (esDigitoDiferenteCero(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 8;
+                } else {
+                    errorInCurrentCharacter();
+                }
+                break;
+            }
+            case 14: {
+                if (caracter == DIAGONAL) {
+                    lexema += Character.toString(caracter);
+                    estado = 15;
+                } else if (caracter == ASTERISCO) {
+                    lexema += Character.toString(caracter);
+                    estado = 16;
+                } else {
+                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                    nuevoLexema();
+                }
+                break;
+            }
+            case 15: {
+                if (caracter == SALTO_LINEA) {
+                    addToken(lexema, TOKEN_COMENTARIO_UNA_LINEA);
+                    nuevoLexema();
+                } else {
+                    lexema += Character.toString(caracter);
+                }
+                break;
+            }
+            case 16: {
+                if (caracter == ASTERISCO) {
+                    lexema += Character.toString(caracter);
+                    estado = 17;
+                } else {
+                    lexema += Character.toString(caracter);
+                }
+                break;
+            }
+            case 17: {
+                if (caracter == ASTERISCO) {
+                    lexema += Character.toString(caracter);
+                } else if (caracter == DIAGONAL) {
+                    lexema += Character.toString(caracter);
+                    addToken(lexema, TOKEN_COMENTARIO_BLOQUE);
+                    estado = 0;
+                    lexema = "";
+                } else {
+                    lexema += Character.toString(caracter);
+                    estado = 16;
+                }
+                break;
+            }
+            case 19: {
+                if (caracter == COMILLAS) {
+                    lexema += Character.toString(caracter);
+                    addToken(lexema, TOKEN_LITERAL);
+                    estado = 0;
+                    lexema = "";
+                } else {
+                    lexema += Character.toString(caracter);
                 }
                 break;
             }
@@ -107,45 +266,87 @@ public class Automata extends HerramientasAutomata {
 
         posicion++;
         if (posicion >= fuente.length()) {
-            if (estado == 1) {
-                addList(lexema, TOKEN_NUMERO_ENTERO);
-            } else if (estado == 2) {
-                addList(lexema, TOKEN_NUMERO_ENTERO);
-            } else if (estado == 3) {
-                addList(lexema, TOKEN_OPERADOR_ARITMETICO);
+            switch (estado) {
+                case 1:
+                    addToken(lexema, TOKEN_NUMERO_ENTERO);
+                    break;
+                case 2:
+                    addToken(lexema, TOKEN_NUMERO_ENTERO);
+                    break;
+                case 3:
+                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                    break;
+                case 4:
+                    addError(lexema);
+                    break;
+                case 5:
+                    addError(lexema);
+                    break;
+                case 6:
+                    addError(lexema);
+                    break;
+                case 7:
+                    addToken(lexema, TOKEN_NUMERO_DECIMAL);
+                    break;
+                case 8:
+                    addToken(lexema, TOKEN_NUMERO_DECIMAL);
+                    break;
+                case 9:
+                    addToken(lexema, TOKEN_NUMERO_DECIMAL);
+                    break;
+                case 10:
+                    addError(lexema);
+                    break;
+                case 14:
+                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                    break;
+                case 15:
+                    addToken(lexema, TOKEN_COMENTARIO_UNA_LINEA);
+                    break;
+                case 16:
+                    addError(lexema);
+                    break;
+                case 17:
+                    addError(lexema);
+                    break;
+                case 19:
+                    addError(lexema);
+                    break;
             }
         } else {
             iniciarProceso();
         }
     }
 
-    private void nuevoLexema() {
-        lexema = "";
-        estado = 0;
-        posicion--;
-    }
-
-    private void error() {
+    private void errorInNextCharacter() {
         lexema += Character.toString(caracter);
         posicion++;
         if (posicion >= fuente.length()) {
             estado = 0;
-            addList(lexema, TOKEN_ERROR);
+            addError(lexema);
         } else {
             caracter = fuente.charAt(posicion);
             if (estado == 1) {
                 if (!esDigito(caracter)) {
-                    addList(lexema, TOKEN_ERROR);
+                    addError(lexema);
                     nuevoLexema();
+                } else {
+                    errorInNextCharacter();
                 }
-            } else if (esEspacio(caracter)) {
-                addList(lexema, TOKEN_ERROR);
-                estado = 0;
-                lexema = "";
-            } else {
-                error();
             }
         }
+    }
+
+    private void errorInCurrentCharacter() {
+        addError(lexema);
+        nuevoLexema();
+    }
+
+    private void nuevoLexema() {
+        lexema = "";
+        estado = 0;
+        posicion--;
+        posicionInicial = posicion; 
     }
 
     private void imprimirLista() {
@@ -156,9 +357,32 @@ public class Automata extends HerramientasAutomata {
         System.out.println(auxiliar);
     }
 
-    private void addList(String lex, String token) {
+    private void addError(String lexema) {
+        ErrorLexema el = new ErrorLexema(lexema, 0, 0);
+        this.listaErrores.add(el);
+    }
+
+    private void addToken(String lex, String tokn) {
+        Token token = new Token(tokn, lex, posicionInicial, filaActual);
+        this.listaTokens.add(token);
         listaLexema.add(lex);
-        listaToken.add(token);
+        listaToken.add(tokn);
+    }
+
+    public List<ErrorLexema> getListaErrores() {
+        return listaErrores;
+    }
+
+    public void setListaErrores(List<ErrorLexema> listaErrores) {
+        this.listaErrores = listaErrores;
+    }
+
+    public List<Token> getListaTokens() {
+        return listaTokens;
+    }
+
+    public void setListaTokens(List<Token> listaTokens) {
+        this.listaTokens = listaTokens;
     }
 
 }

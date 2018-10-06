@@ -1,6 +1,7 @@
 package analizador.analizadorlexico.frontend;
 
 import analizador.analizadorlexico.backend.ManejadorAreaTexto;
+import analizador.tokens.backend.ErrorLexema;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -8,10 +9,16 @@ import java.awt.event.MouseListener;
 import javax.swing.JEditorPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.List;
+import javax.swing.JPanel;
+import javax.swing.JTable;
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.UndoManager;
+import org.jdesktop.observablecollections.ObservableCollections;
+import org.jdesktop.observablecollections.ObservableList;
 
 /**
  *
@@ -22,11 +29,15 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     public String textoIngresado = "";
     private ManejadorAreaTexto mat = null;
     private UndoManager undoManager = null;
+    private List<ErrorLexema> listaErrores = null;
+    private ObservableList<ErrorLexema> listaErrorObser = null;
 
     /**
      * Creates new form AreaTexto
      */
     public AreaTexto() {
+        this.listaErrores = new LinkedList<>();
+        this.listaErrorObser = ObservableCollections.observableList(listaErrores);
         initComponents();
         jEditorPaneTexto.addKeyListener(this);
         jEditorPaneTexto.addMouseListener(this);
@@ -35,6 +46,8 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jPanelErrores.setVisible(false); //Panel no visible hasta que se encuentre un error o se llame por aparte
         jButtonRedo.setEnabled(false); //Botones desabilitados hasta que se escriba en el area de texto
         jButtonUndo.setEnabled(false);
+        jButtonPaste.setEnabled(false);
+        jButtonCopy.setEnabled(false);
         
         //Funciones que implementan la funcion "Rehacer" y "Deshacer"
         jEditorPaneTexto.getDocument().addUndoableEditListener(new UndoableEditListener() {
@@ -43,7 +56,6 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
             updateButtons();
           }
         });
-        
         jButtonUndo.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         try {
@@ -52,9 +64,9 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
           cre.printStackTrace();
         }
         updateButtons();
+        mat.iniciarAutomata();
       }
     });
- 
     jButtonRedo.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         try {
@@ -63,6 +75,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
           cre.printStackTrace();
         }
         updateButtons();
+        mat.iniciarAutomata();
       }
     });
     }
@@ -75,6 +88,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -122,22 +136,18 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jPanelErrores.setBackground(new java.awt.Color(2, 36, 61));
         jPanelErrores.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
-        jTableErrores.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
-            },
-            new String [] {
-                "Linea", "Columna"
-            }
-        ));
+        org.jdesktop.beansbinding.ELProperty eLProperty = org.jdesktop.beansbinding.ELProperty.create("${listaErrorObser}");
+        org.jdesktop.swingbinding.JTableBinding jTableBinding = org.jdesktop.swingbinding.SwingBindings.createJTableBinding(org.jdesktop.beansbinding.AutoBinding.UpdateStrategy.READ_WRITE, this, eLProperty, jTableErrores);
+        org.jdesktop.swingbinding.JTableBinding.ColumnBinding columnBinding = jTableBinding.addColumnBinding(org.jdesktop.beansbinding.ELProperty.create("${nombreLexema}"));
+        columnBinding.setColumnName("Lexema");
+        columnBinding.setColumnClass(String.class);
+        bindingGroup.addBinding(jTableBinding);
+        jTableBinding.bind();
         jScrollPane2.setViewportView(jTableErrores);
 
         jLabel3.setFont(new java.awt.Font("Caviar Dreams", 0, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(254, 254, 254));
-        jLabel3.setText("Lexemas invalidos");
+        jLabel3.setText("Lexemas no validos");
 
         javax.swing.GroupLayout jPanelErroresLayout = new javax.swing.GroupLayout(jPanelErrores);
         jPanelErrores.setLayout(jPanelErroresLayout);
@@ -151,7 +161,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
                         .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelErroresLayout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addGap(25, 25, 25))))
+                        .addGap(21, 21, 21))))
         );
         jPanelErroresLayout.setVerticalGroup(
             jPanelErroresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,10 +176,20 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jButtonUndo.setBackground(new java.awt.Color(219, 32, 28));
         jButtonUndo.setForeground(new java.awt.Color(254, 254, 254));
         jButtonUndo.setText("Undo");
+        jButtonUndo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUndoActionPerformed(evt);
+            }
+        });
 
         jButtonRedo.setBackground(new java.awt.Color(55, 162, 201));
         jButtonRedo.setForeground(new java.awt.Color(254, 254, 254));
         jButtonRedo.setText("Redo");
+        jButtonRedo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonRedoActionPerformed(evt);
+            }
+        });
 
         jButtonCopy.setBackground(new java.awt.Color(255, 171, 0));
         jButtonCopy.setForeground(new java.awt.Color(254, 254, 254));
@@ -183,6 +203,11 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jButtonPaste.setBackground(new java.awt.Color(37, 110, 192));
         jButtonPaste.setForeground(new java.awt.Color(254, 254, 254));
         jButtonPaste.setText("Paste");
+        jButtonPaste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonPasteActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -205,7 +230,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
                 .addComponent(jButtonCopy)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonPaste)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 285, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
                 .addComponent(jButtonUndo)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonRedo)
@@ -215,21 +240,20 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanelErrores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                    .addComponent(jPanelErrores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(4, 4, 4)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabelColummna)
-                    .addComponent(jLabelLinea)
-                    .addComponent(jButtonUndo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButtonRedo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButtonPaste, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jButtonPaste, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel2)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabelColummna)
+                        .addComponent(jLabelLinea)
+                        .addComponent(jButtonUndo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButtonRedo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, 0))
         );
 
@@ -243,10 +267,23 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
+
+        bindingGroup.bind();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCopyActionPerformed
+    private void jButtonUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUndoActionPerformed
+    }//GEN-LAST:event_jButtonUndoActionPerformed
+
+    private void jButtonRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonRedoActionPerformed
+    }//GEN-LAST:event_jButtonRedoActionPerformed
+
+    private void jButtonPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPasteActionPerformed
+        jEditorPaneTexto.paste();
         mat.iniciarAutomata();
+    }//GEN-LAST:event_jButtonPasteActionPerformed
+
+    private void jButtonCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCopyActionPerformed
+        jEditorPaneTexto.copy();
     }//GEN-LAST:event_jButtonCopyActionPerformed
 
     public JEditorPane getjEditorPane1() {
@@ -255,6 +292,14 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
 
     public void setjEditorPane1(JEditorPane jEditorPane1) {
         this.jEditorPaneTexto = jEditorPane1;
+    }
+
+    public JPanel getjPanelErrores() {
+        return jPanelErrores;
+    }
+
+    public void setjPanelErrores(JPanel jPanelErrores) {
+        this.jPanelErrores = jPanelErrores;
     }
 
     public ManejadorAreaTexto getMat() {
@@ -284,26 +329,29 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     public void mouseClicked(MouseEvent e) {
         jLabelColummna.setText(Integer.toString(mat.getColumn())); //Funcion encargada de obtener la columna del cursor
         jLabelLinea.setText(Integer.toString(mat.getLine())); //Funcion encargada de obtener la linea del cursor
+        jButtonCopy.setEnabled(true);
+        jButtonPaste.setEnabled(true);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-
     }
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+    }
+    
+    public void actualizarErrores(List errores){
+        this.listaErrorObser.clear();
+        this.listaErrorObser.addAll(errores);
     }
     
     //Metodo encargado de actualizar el estado de los botones segun "Undo Manager"
@@ -312,6 +360,18 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jButtonRedo.setEnabled(undoManager.canRedo());
     }
 
+    public ObservableList<ErrorLexema> getListaErrorObser() {
+        return listaErrorObser;
+    }
+
+    public void setListaErrorObser(ObservableList<ErrorLexema> listaErrorObser) {
+        this.listaErrorObser = listaErrorObser;
+    }
+    
+    public void mostrarTokens(){
+        mat.mostrarTokens();
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCopy;
     private javax.swing.JButton jButtonPaste;
@@ -324,10 +384,11 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     private javax.swing.JLabel jLabelColummna;
     private javax.swing.JLabel jLabelLinea;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanelErrores;
+    public javax.swing.JPanel jPanelErrores;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTableErrores;
+    public javax.swing.JTable jTableErrores;
+    private org.jdesktop.beansbinding.BindingGroup bindingGroup;
     // End of variables declaration//GEN-END:variables
 
 }
