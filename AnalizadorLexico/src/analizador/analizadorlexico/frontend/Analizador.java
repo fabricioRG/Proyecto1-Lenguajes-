@@ -1,6 +1,7 @@
 package analizador.analizadorlexico.frontend;
 
 import analizador.analizadorlexico.backend.ManejadorAnalizador;
+import javax.swing.JMenuItem;
 
 /**
  *
@@ -17,6 +18,7 @@ public class Analizador extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         ma.agregarVentana();
+        jMenuItemPaste.setEnabled(false);
     }
     
     /**
@@ -38,27 +40,30 @@ public class Analizador extends javax.swing.JFrame {
         jMenuItemSaveAs = new javax.swing.JMenuItem();
         jMenuItemCloseTab = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
-        jMenuItemUndo = new javax.swing.JMenuItem();
-        jMenuItemRedo = new javax.swing.JMenuItem();
         jMenuItemCopy = new javax.swing.JMenuItem();
         jMenuItemPaste = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        jMenuItemTokens = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
+        jMenuItemBuscar = new javax.swing.JMenuItem();
         jMenuItemAbout = new javax.swing.JMenuItem();
         jMenuItemExit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Analizador Lexico");
 
+        jTabbedPane.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 900, Short.MAX_VALUE)
+            .addComponent(jTabbedPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1085, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 479, Short.MAX_VALUE)
+                .addComponent(jTabbedPane, javax.swing.GroupLayout.DEFAULT_SIZE, 640, Short.MAX_VALUE)
                 .addGap(0, 0, 0))
         );
 
@@ -108,12 +113,6 @@ public class Analizador extends javax.swing.JFrame {
 
         jMenu2.setText("Edit");
 
-        jMenuItemUndo.setText("Undo");
-        jMenu2.add(jMenuItemUndo);
-
-        jMenuItemRedo.setText("Redo");
-        jMenu2.add(jMenuItemRedo);
-
         jMenuItemCopy.setText("Copy");
         jMenuItemCopy.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -132,7 +131,22 @@ public class Analizador extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu2);
 
+        jMenu4.setText("Reportes");
+
+        jMenuItemTokens.setText("Tokens");
+        jMenuItemTokens.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItemTokensActionPerformed(evt);
+            }
+        });
+        jMenu4.add(jMenuItemTokens);
+
+        jMenuBar1.add(jMenu4);
+
         jMenu3.setText("Options");
+
+        jMenuItemBuscar.setText("Buscar cadena");
+        jMenu3.add(jMenuItemBuscar);
 
         jMenuItemAbout.setText("About");
         jMenuItemAbout.addActionListener(new java.awt.event.ActionListener() {
@@ -197,30 +211,42 @@ public class Analizador extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuItemSaveAsActionPerformed
 
     private void jMenuItemCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemCopyActionPerformed
-        
     }//GEN-LAST:event_jMenuItemCopyActionPerformed
 
     private void jMenuItemPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemPasteActionPerformed
-        
     }//GEN-LAST:event_jMenuItemPasteActionPerformed
 
+    private void jMenuItemTokensActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItemTokensActionPerformed
+        ma.mostrarTokens();
+    }//GEN-LAST:event_jMenuItemTokensActionPerformed
+
+    public JMenuItem getjMenuItemPaste() {
+        return jMenuItemPaste;
+    }
+
+    public void setjMenuItemPaste(JMenuItem jMenuItemPaste) {
+        this.jMenuItemPaste = jMenuItemPaste;
+    }
+
+    
      
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItemAbout;
+    private javax.swing.JMenuItem jMenuItemBuscar;
     private javax.swing.JMenuItem jMenuItemCloseTab;
     private javax.swing.JMenuItem jMenuItemCopy;
     private javax.swing.JMenuItem jMenuItemExit;
     private javax.swing.JMenuItem jMenuItemNew;
     private javax.swing.JMenuItem jMenuItemOpen;
     private javax.swing.JMenuItem jMenuItemPaste;
-    private javax.swing.JMenuItem jMenuItemRedo;
     public javax.swing.JMenuItem jMenuItemSave;
     public javax.swing.JMenuItem jMenuItemSaveAs;
-    private javax.swing.JMenuItem jMenuItemUndo;
+    private javax.swing.JMenuItem jMenuItemTokens;
     private javax.swing.JPanel jPanel1;
     public javax.swing.JTabbedPane jTabbedPane;
     // End of variables declaration//GEN-END:variables

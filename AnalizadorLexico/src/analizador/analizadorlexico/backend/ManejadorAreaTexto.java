@@ -1,34 +1,49 @@
 package analizador.analizadorlexico.backend;
 
 import analizador.analizadorlexico.frontend.AreaTexto;
-import analizador.automatas.AsciiValues;
-import analizador.automatas.TextoAnalizar;
-import javax.swing.JEditorPane;
-import javax.swing.text.Document;
+import analizador.automatas.HerramientasAutomata;
+import analizador.automatas.Automata;
+import analizador.tokens.frontend.TablaTokens;
+import javax.swing.JOptionPane;
 import net.htmlparser.jericho.Renderer;
 import net.htmlparser.jericho.Segment;
 import net.htmlparser.jericho.Source;
-import org.jsoup.Jsoup;
 
 /**
  *
  * @author fabricio
  */
-public class ManejadorAreaTexto extends AsciiValues {
+public class ManejadorAreaTexto extends HerramientasAutomata {
 
     private AreaTexto at = null;
+    private Automata aut = null;
 
     public ManejadorAreaTexto(AreaTexto at) {
         this.at = at;
+        this.aut = new Automata(this);
     }
-
-    private String getPlainText() {
+    
+    //Metodo que tiene como funcion principal iniciar el automata encargado de evaluar los caracteres
+    //contenidos en el area de texto o "jEditorPane"
+    public void iniciarAutomata(){
+        aut.iniciarAFD(getPlainText());
+        if(aut.getListaErrores().size() > 0){
+            at.actualizarErrores(aut.getListaErrores());
+            at.jPanelErrores.setVisible(true);
+        } else {
+            at.jPanelErrores.setVisible(false);
+        }
+    }
+    
+    //Metodo que devuelve un texto plano, tomando como texto un texto en html
+    public String getPlainText() {
         Source htmlSource = new Source(at.getjEditorPane1().getText());
         Segment htmlSeg = new Segment(htmlSource, 0, htmlSource.length());
         Renderer htmlRend = new Renderer(htmlSeg);
         return htmlRend.toString();
     }
 
+    //Metodo que devuelve la columna actual del cursor
     public int getColumn() {
         String texto = getPlainText();
         int posicion = at.getjEditorPane1().getCaretPosition();
@@ -48,6 +63,7 @@ public class ManejadorAreaTexto extends AsciiValues {
         return contador;
     }
 
+    //Metodo que devuelve la linea actual del cursor
     public int getLine() {
         String texto = getPlainText();
         int posicion = at.getjEditorPane1().getCaretPosition();
@@ -62,4 +78,16 @@ public class ManejadorAreaTexto extends AsciiValues {
         return contador;
     }
 
+    public void mostrarTokens(){
+        TablaTokens tt = new TablaTokens(null, true);
+        if (!aut.getListaTokens().isEmpty() && aut.getListaErrores().isEmpty()){
+            tt.actualizarTokens(aut.getListaTokens());
+            tt.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(at, "         No es posible mostrar los tokens disponibles.\nPues no hay tokens disponibles "
+                    + "o hay lexemas no validos","Error",JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    
 }

@@ -4,7 +4,7 @@ package analizador.automatas;
  *
  * @author fabricio
  */
-public class TextoAnalizar extends AsciiValues {
+public class TextoAnalizar extends HerramientasAutomata {
 
     private char[] cadenaChar = null;
     private int posicionActual = 0;

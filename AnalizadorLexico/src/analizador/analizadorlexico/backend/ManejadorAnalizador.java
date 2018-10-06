@@ -4,7 +4,6 @@ import analizador.archivos.frontend.GuardadorArchivo;
 import analizador.analizadorlexico.frontend.*;
 import analizador.archivos.backend.ManejadorArchivos;
 import analizador.archivos.frontend.SeleccionadorArchivo;
-import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import javax.swing.ImageIcon;
@@ -22,9 +21,9 @@ public class ManejadorAnalizador {
 
     public ManejadorAnalizador(Analizador analizador) {
         this.analizador = analizador;
-        
+
     }
-    
+
     public void agregarVentana() {
         AreaTexto at = new AreaTexto();
         analizador.jTabbedPane.add(NEW_TAB, at);
@@ -55,7 +54,7 @@ public class ManejadorAnalizador {
                 if (!error) {
                     try {
                         ManejadorArchivos ma = new ManejadorArchivos();
-                        agregarVentana(archivo.getAbsolutePath(), ma.obtenerTextoDeArchivo(archivo));
+                        agregarVentana(archivo.getAbsolutePath(), ma.obtenerTextoDeArchivoEnHtml(archivo));
                     } catch (FileNotFoundException e) {
                         JOptionPane.showMessageDialog(analizador, e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                     } catch (Exception e) {
@@ -70,8 +69,6 @@ public class ManejadorAnalizador {
     }
 
     public void cerrarVentana(int ventana) {
-        AreaTexto at = (AreaTexto) analizador.jTabbedPane.getSelectedComponent();
-        String texto = at.getjEditorPane1().getText();
         analizador.jTabbedPane.remove(ventana);
         estadoGuardar();
     }
@@ -118,7 +115,7 @@ public class ManejadorAnalizador {
         if (file != null) {
             try {
                 ManejadorArchivos ma = new ManejadorArchivos();
-                ma.escribirArchivoTexto(file, at.getjEditorPane1().getText());
+                ma.escribirArchivoTexto(file, at.getMat().getPlainText());
                 JOptionPane.showMessageDialog(analizador, "Se ha guardado correctamente el archivo \"" + path
                         + "\"", "Accion exitosa", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
@@ -139,4 +136,9 @@ public class ManejadorAnalizador {
         analizador.jMenuItemSaveAs.setEnabled(estado);
     }
 
+    public void mostrarTokens(){
+        AreaTexto at = (AreaTexto) analizador.jTabbedPane.getSelectedComponent();
+        at.mostrarTokens();
+    }
+    
 }
