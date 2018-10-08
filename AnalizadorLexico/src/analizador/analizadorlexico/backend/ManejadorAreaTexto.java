@@ -85,7 +85,7 @@ public class ManejadorAreaTexto extends HerramientasAutomata {
             tt.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(at, "         No es posible mostrar los tokens disponibles.\nPues no hay tokens disponibles "
-                    + "o no hay lexemas validos","Error",JOptionPane.ERROR_MESSAGE);
+                    + "o hay lexemas no validos","Error",JOptionPane.ERROR_MESSAGE);
         }
     }
     

@@ -16,7 +16,6 @@ public class Buscador {
 
     public String buscarCadenaEnTexto(String cadena, String texto) {
         String textoFinal = "";
-        
         boolean estado = false;
         if (texto.length() >= cadena.length()) {
             for (int i = 0; i <= texto.length() - cadena.length(); i++) {

@@ -173,9 +173,8 @@ public class ManejadorAnalizador {
         for (int i = tamaño - 1; i >= 0; i--) {
             cerrarVentana(i);
         }
-        if (analizador.getComponentCount() < 1) {
+        if (analizador.getComponentCount() == 0) {
             System.exit(0);
-
         }
     }
 
