@@ -69,8 +69,23 @@ public class ManejadorAnalizador {
     }
 
     public void cerrarVentana(int ventana) {
-        analizador.jTabbedPane.remove(ventana);
-        estadoGuardar();
+        System.out.println(ventana);
+        AreaTexto at = (AreaTexto) analizador.jTabbedPane.getSelectedComponent();
+        if (at.isModificado()) {
+            int respuesta = JOptionPane.showConfirmDialog(analizador, "¿Desea guardar los cambios?",
+                    "Alerta!", JOptionPane.YES_NO_CANCEL_OPTION);
+            if (respuesta == JOptionPane.NO_OPTION) {
+                analizador.jTabbedPane.remove(ventana);
+                estadoGuardar();
+            } else if (respuesta == JOptionPane.YES_OPTION) {
+                guardarArchivo(ventana);
+                analizador.jTabbedPane.remove(ventana);
+                estadoGuardar();
+            }
+        } else {
+            analizador.jTabbedPane.remove(ventana);
+            estadoGuardar();
+        }
     }
 
     public void guardarArchivo(int i) {
@@ -116,6 +131,7 @@ public class ManejadorAnalizador {
             try {
                 ManejadorArchivos ma = new ManejadorArchivos();
                 ma.escribirArchivoTexto(file, at.getMat().getPlainText());
+                at.setModificado(false);
                 JOptionPane.showMessageDialog(analizador, "Se ha guardado correctamente el archivo \"" + path
                         + "\"", "Accion exitosa", JOptionPane.INFORMATION_MESSAGE);
             } catch (Exception e) {
@@ -134,11 +150,33 @@ public class ManejadorAnalizador {
         }
         analizador.jMenuItemSave.setEnabled(estado);
         analizador.jMenuItemSaveAs.setEnabled(estado);
+        analizador.jMenuItemCloseTab.setEnabled(estado);
     }
 
-    public void mostrarTokens(){
+    public void mostrarTokens() {
         AreaTexto at = (AreaTexto) analizador.jTabbedPane.getSelectedComponent();
         at.mostrarTokens();
     }
-    
+
+    public void buscarCadena() {
+        String respuesta = JOptionPane.showInputDialog(analizador, "Escriba la cadena "
+                + "a buscar", "Busqueda", JOptionPane.QUESTION_MESSAGE);
+        if (respuesta != null) {
+            if (!respuesta.isEmpty()) {
+                AreaTexto at = (AreaTexto) analizador.jTabbedPane.getSelectedComponent();
+                at.getMat().subrayarTexto(respuesta);
+            }
+        }
+    }
+
+    public void cerrarVentanas(int tamaño) {
+        for (int i = tamaño - 1; i >= 0; i--) {
+            cerrarVentana(i);
+        }
+        if (analizador.getComponentCount() < 1) {
+            System.exit(0);
+
+        }
+    }
+
 }

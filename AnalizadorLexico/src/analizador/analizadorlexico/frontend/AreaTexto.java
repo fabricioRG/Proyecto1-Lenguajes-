@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
 import java.util.List;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.event.UndoableEditEvent;
@@ -31,6 +32,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     private UndoManager undoManager = null;
     private List<ErrorLexema> listaErrores = null;
     private ObservableList<ErrorLexema> listaErrorObser = null;
+    private boolean modificado = false;
 
     /**
      * Creates new form AreaTexto
@@ -90,6 +92,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     private void initComponents() {
         bindingGroup = new org.jdesktop.beansbinding.BindingGroup();
 
+        jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jEditorPaneTexto = new javax.swing.JEditorPane();
@@ -105,6 +108,12 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jButtonRedo = new javax.swing.JButton();
         jButtonCopy = new javax.swing.JButton();
         jButtonPaste = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabelCoincidencias = new javax.swing.JLabel();
+        jLabelCadena = new javax.swing.JLabel();
+
+        jLabel4.setText("jLabel4");
 
         setPreferredSize(new java.awt.Dimension(844, 455));
 
@@ -116,7 +125,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jEditorPaneTexto.setText("<html>\n<head>\n</head>\n<body style=\"color:white;font-family:Open Sans Light;padding:4px;\">\n<pre>\n</pre>\n</body>\n</html>\n");
         jEditorPaneTexto.setToolTipText("");
         jEditorPaneTexto.setCaretColor(new java.awt.Color(254, 254, 254));
-        jEditorPaneTexto.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
+        jEditorPaneTexto.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jScrollPane1.setViewportView(jEditorPaneTexto);
 
         jLabel1.setFont(new java.awt.Font("Open Sans", 1, 12)); // NOI18N
@@ -173,7 +182,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
                 .addContainerGap())
         );
 
-        jButtonUndo.setBackground(new java.awt.Color(219, 32, 28));
+        jButtonUndo.setBackground(new java.awt.Color(37, 110, 192));
         jButtonUndo.setForeground(new java.awt.Color(254, 254, 254));
         jButtonUndo.setText("Undo");
         jButtonUndo.addActionListener(new java.awt.event.ActionListener() {
@@ -200,7 +209,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
             }
         });
 
-        jButtonPaste.setBackground(new java.awt.Color(37, 110, 192));
+        jButtonPaste.setBackground(new java.awt.Color(219, 32, 28));
         jButtonPaste.setForeground(new java.awt.Color(254, 254, 254));
         jButtonPaste.setText("Paste");
         jButtonPaste.addActionListener(new java.awt.event.ActionListener() {
@@ -208,6 +217,20 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
                 jButtonPasteActionPerformed(evt);
             }
         });
+
+        jLabel5.setFont(new java.awt.Font("Open Sans", 1, 12)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(2, 36, 61));
+        jLabel5.setText("Cadena:");
+
+        jLabel6.setFont(new java.awt.Font("Open Sans", 1, 12)); // NOI18N
+        jLabel6.setForeground(new java.awt.Color(2, 36, 61));
+        jLabel6.setText("Coincidencias:");
+
+        jLabelCoincidencias.setForeground(new java.awt.Color(2, 36, 61));
+        jLabelCoincidencias.setText(" ");
+
+        jLabelCadena.setForeground(new java.awt.Color(2, 36, 61));
+        jLabelCadena.setText(" ");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -226,34 +249,46 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelColummna, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(46, 46, 46)
+                .addGap(51, 51, 51)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelCadena, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabelCoincidencias, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
                 .addComponent(jButtonCopy)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonPaste)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 184, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jButtonUndo)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonRedo)
-                .addGap(28, 28, 28))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 428, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
                     .addComponent(jPanelErrores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(4, 4, 4)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabelColummna)
+                    .addComponent(jLabelLinea)
+                    .addComponent(jButtonUndo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButtonRedo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButtonCopy, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButtonPaste, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel2)
-                        .addComponent(jLabel1)
-                        .addComponent(jLabelColummna)
-                        .addComponent(jLabelLinea)
-                        .addComponent(jButtonUndo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButtonRedo, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jLabel6)
+                        .addComponent(jLabel5)
+                        .addComponent(jLabelCoincidencias)
+                        .addComponent(jLabelCadena)))
                 .addGap(0, 0, 0))
         );
 
@@ -319,6 +354,7 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
         jLabelColummna.setText(Integer.toString(mat.getColumn())); //Funcion encargada de obtener la columna del cursor
         jLabelLinea.setText(Integer.toString(mat.getLine())); //Funcion encargada de obtener la linea del cursor
         mat.iniciarAutomata(); //Metodo encargado de iniciar el automata
+        this.modificado = true;
     }
 
     @Override
@@ -371,6 +407,30 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     public void mostrarTokens(){
         mat.mostrarTokens();
     }
+
+    public JLabel getjLabelCadena() {
+        return jLabelCadena;
+    }
+
+    public void setjLabelCadena(JLabel jLabelCadena) {
+        this.jLabelCadena = jLabelCadena;
+    }
+
+    public JLabel getjLabelCoincidencias() {
+        return jLabelCoincidencias;
+    }
+
+    public void setjLabelCoincidencias(JLabel jLabelCoincidencias) {
+        this.jLabelCoincidencias = jLabelCoincidencias;
+    }
+
+    public boolean isModificado() {
+        return modificado;
+    }
+
+    public void setModificado(boolean modificado) {
+        this.modificado = modificado;
+    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonCopy;
@@ -381,6 +441,11 @@ public class AreaTexto extends javax.swing.JPanel implements KeyListener, MouseL
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabelCadena;
+    private javax.swing.JLabel jLabelCoincidencias;
     private javax.swing.JLabel jLabelColummna;
     private javax.swing.JLabel jLabelLinea;
     private javax.swing.JPanel jPanel1;

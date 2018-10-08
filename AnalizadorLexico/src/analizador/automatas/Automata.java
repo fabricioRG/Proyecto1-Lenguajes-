@@ -16,8 +16,10 @@ public class Automata extends HerramientasAutomata {
     private String fuente = "";
     private String lexema = "";
     private char caracter;
-    private int posicionInicial = 0;
+    private int columna = 0;
+    private int columnaActual = 0;
     private int filaActual = 0;
+    private int saltosLinea = 0;
     private List<String> listaLexema;
     private List<String> listaToken;
     private List<Token> listaTokens;
@@ -37,8 +39,10 @@ public class Automata extends HerramientasAutomata {
         this.estado = 0;
         this.posicion = 0;
         this.lexema = "";
-        this.posicionInicial = 1;
+        this.columna = 1;
+        this.columnaActual = 0;
         this.filaActual = 1;
+        saltosLinea = 0;
         this.listaLexema.clear();
         this.listaToken.clear();
         this.listaTokens.clear();
@@ -55,13 +59,14 @@ public class Automata extends HerramientasAutomata {
         caracter = fuente.charAt(posicion);
         switch (estado) {
             case 0: {
-                if(caracter == SALTO_LINEA){
+                if (caracter == SALTO_LINEA) {
                     lexema = "";
                     filaActual++;
-                    posicionInicial = 1;
+                    columnaActual = -1;
+                    columna = 1;
                 } else if (esEspacio(caracter)) {
                     lexema = "";
-                    posicionInicial++;
+                    columna++;
                 } else if (esCero(caracter)) {
                     lexema += Character.toString(caracter);
                     estado = 1;
@@ -72,11 +77,14 @@ public class Automata extends HerramientasAutomata {
                     lexema += Character.toString(caracter);
                     estado = 3;
                 } else if (caracter == ASTERISCO || caracter == MODULO) {
-                    addToken(Character.toString(caracter), TOKEN_OPERADOR_ARITMETICO);
+                    lexema += Character.toString(caracter);
+                    estado = 11;
                 } else if (esSignoPuntuacion(caracter)) {
-                    addToken(Character.toString(caracter), TOKEN_SIGNO_PUNTUACION);
+                    lexema += Character.toString(caracter);
+                    estado = 12;
                 } else if (esSignoAgrupacion(caracter)) {
-                    addToken(Character.toString(caracter), TOKEN_SIGNO_AGRUPACION);
+                    lexema += Character.toString(caracter);
+                    estado = 13;
                 } else if (caracter == DIAGONAL) {
                     lexema += Character.toString(caracter);
                     estado = 14;
@@ -204,6 +212,21 @@ public class Automata extends HerramientasAutomata {
                 }
                 break;
             }
+            case 11: {
+                addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                nuevoLexema();
+                break;
+            }
+            case 12: {
+                addToken(lexema, TOKEN_SIGNO_PUNTUACION);
+                nuevoLexema();
+                break;
+            }
+            case 13: {
+                addToken(lexema, TOKEN_SIGNO_AGRUPACION);
+                nuevoLexema();
+                break;
+            }
             case 14: {
                 if (caracter == DIAGONAL) {
                     lexema += Character.toString(caracter);
@@ -219,8 +242,7 @@ public class Automata extends HerramientasAutomata {
             }
             case 15: {
                 if (caracter == SALTO_LINEA) {
-                    addToken(lexema, TOKEN_COMENTARIO_UNA_LINEA);
-                    nuevoLexema();
+                    estado = 21;
                 } else {
                     lexema += Character.toString(caracter);
                 }
@@ -232,6 +254,11 @@ public class Automata extends HerramientasAutomata {
                     estado = 17;
                 } else {
                     lexema += Character.toString(caracter);
+                    if (caracter == SALTO_LINEA) {
+                        filaActual++;
+                        columnaActual = -1;
+                        saltosLinea++;
+                    }
                 }
                 break;
             }
@@ -240,24 +267,41 @@ public class Automata extends HerramientasAutomata {
                     lexema += Character.toString(caracter);
                 } else if (caracter == DIAGONAL) {
                     lexema += Character.toString(caracter);
-                    addToken(lexema, TOKEN_COMENTARIO_BLOQUE);
-                    estado = 0;
-                    lexema = "";
+                    estado = 18;
                 } else {
                     lexema += Character.toString(caracter);
                     estado = 16;
+                    if (caracter == SALTO_LINEA) {
+                        filaActual++;
+                        columnaActual = -1;
+                        saltosLinea++;
+                    }
                 }
+                break;
+            }
+            case 18: {
+                addToken(lexema, TOKEN_COMENTARIO_BLOQUE);
+                nuevoLexema();
                 break;
             }
             case 19: {
                 if (caracter == COMILLAS) {
                     lexema += Character.toString(caracter);
-                    addToken(lexema, TOKEN_LITERAL);
-                    estado = 0;
-                    lexema = "";
+                    estado = 20;
                 } else {
                     lexema += Character.toString(caracter);
                 }
+                break;
+            }
+            case 20: {
+                addToken(lexema, TOKEN_LITERAL);
+                nuevoLexema();
+                break;
+            }
+            case 21: {
+                addToken(lexema, TOKEN_COMENTARIO_UNA_LINEA);
+                nuevoLexema();
+                nuevoLexema();
                 break;
             }
             default:
@@ -265,6 +309,7 @@ public class Automata extends HerramientasAutomata {
         }
 
         posicion++;
+        columnaActual++;
         if (posicion >= fuente.length()) {
             switch (estado) {
                 case 1:
@@ -297,6 +342,15 @@ public class Automata extends HerramientasAutomata {
                 case 10:
                     addError(lexema);
                     break;
+                case 11:
+                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                    break;
+                case 12:
+                    addToken(lexema, TOKEN_SIGNO_PUNTUACION);
+                    break;
+                case 13:
+                    addToken(lexema, TOKEN_SIGNO_AGRUPACION);
+                    break;
                 case 14:
                     addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
                     break;
@@ -309,8 +363,17 @@ public class Automata extends HerramientasAutomata {
                 case 17:
                     addError(lexema);
                     break;
+                case 18:
+                    addToken(lexema, TOKEN_COMENTARIO_BLOQUE);
+                    break;
                 case 19:
                     addError(lexema);
+                    break;
+                case 20:
+                    addToken(lexema, TOKEN_LITERAL);
+                    break;
+                case 21:
+                    addToken(lexema, TOKEN_COMENTARIO_UNA_LINEA);
                     break;
             }
         } else {
@@ -321,6 +384,7 @@ public class Automata extends HerramientasAutomata {
     private void errorInNextCharacter() {
         lexema += Character.toString(caracter);
         posicion++;
+        columnaActual++;
         if (posicion >= fuente.length()) {
             estado = 0;
             addError(lexema);
@@ -346,7 +410,7 @@ public class Automata extends HerramientasAutomata {
         lexema = "";
         estado = 0;
         posicion--;
-        posicionInicial = posicion; 
+        columnaActual--;
     }
 
     private void imprimirLista() {
@@ -363,10 +427,18 @@ public class Automata extends HerramientasAutomata {
     }
 
     private void addToken(String lex, String tokn) {
-        Token token = new Token(tokn, lex, posicionInicial, filaActual);
+        Token token = null;
+        if(estado == 18){
+            int fila = filaActual - saltosLinea;
+            token = new Token(tokn, lex, columna, fila);
+            saltosLinea = 0;
+        } else {
+            token = new Token(tokn, lex, columna, filaActual);
+        }
         this.listaTokens.add(token);
         listaLexema.add(lex);
         listaToken.add(tokn);
+        columna = columnaActual + 1;
     }
 
     public List<ErrorLexema> getListaErrores() {

@@ -85,9 +85,25 @@ public class ManejadorAreaTexto extends HerramientasAutomata {
             tt.setVisible(true);
         } else {
             JOptionPane.showMessageDialog(at, "         No es posible mostrar los tokens disponibles.\nPues no hay tokens disponibles "
-                    + "o hay lexemas no validos","Error",JOptionPane.ERROR_MESSAGE);
+                    + "o no hay lexemas validos","Error",JOptionPane.ERROR_MESSAGE);
         }
     }
     
+    public void subrayarTexto(String cadenaABuscar){
+        Buscador buscador = new Buscador();
+        String textoFinal = "<html>\n"
+                + "<head>\n"
+                + "</head>\n"
+                + "<body style=\"color:white;font-family:Open Sans Light;padding:4px;\">\n"
+                + "<pre>\n"
+                + buscador.buscarCadenaEnTexto(cadenaABuscar, getPlainText())
+                + "</pre>\n"
+                + "</body>\n"
+                + "</html>\n"
+                + "";
+        at.getjEditorPane1().setText(textoFinal);
+        at.getjLabelCadena().setText(cadenaABuscar);
+        at.getjLabelCoincidencias().setText(Integer.toString(buscador.getCoincidencias()));
+    }
     
 }
