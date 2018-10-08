@@ -18,6 +18,7 @@ public class Automata extends HerramientasAutomata {
     private char caracter;
     private int columna = 0;
     private int columnaActual = 0;
+    private int columnaError = 0;
     private int filaActual = 0;
     private int saltosLinea = 0;
     private List<String> listaLexema;
@@ -40,21 +41,27 @@ public class Automata extends HerramientasAutomata {
         this.posicion = 0;
         this.lexema = "";
         this.columna = 1;
+        this.columnaError = 1;
         this.columnaActual = 0;
         this.filaActual = 1;
-        saltosLinea = 0;
+        this.saltosLinea = 0;
         this.listaLexema.clear();
         this.listaToken.clear();
         this.listaTokens.clear();
         this.listaErrores.clear();
         this.fuente = textoEntrada;
-
         if (textoEntrada.length() > 0) {
             iniciarProceso();
-            imprimirLista();
+//            imprimirLista();
         }
     }
 
+    /**
+     * Metodo que contiene 137 "case" para su evalucacion, los cuales van seleccionandose
+     * mediante se cumple con las condiciones de cada uno, se lleva un contador
+     * de linea, asi como un contador de columna respectivamente para conocer
+     * su posicion en cualquier momento en el reporte de tokens
+     */
     public void iniciarProceso() {
         caracter = fuente.charAt(posicion);
         switch (estado) {
@@ -64,9 +71,11 @@ public class Automata extends HerramientasAutomata {
                     filaActual++;
                     columnaActual = -1;
                     columna = 1;
+                    columnaError = 1;
                 } else if (esEspacio(caracter)) {
                     lexema = "";
                     columna++;
+                    columnaError++;
                 } else if (esCero(caracter)) {
                     lexema += Character.toString(caracter);
                     estado = 1;
@@ -128,7 +137,8 @@ public class Automata extends HerramientasAutomata {
                     lexema += Character.toString(caracter);
                     estado = 136;
                 } else {
-                    errorInNextCharacter();
+                    lexema += Character.toString(caracter);
+                    estado = 138;
                 }
                 break;
             }
@@ -1188,20 +1198,184 @@ public class Automata extends HerramientasAutomata {
                 verificarCaracterFinal(caracter);
                 break;
             }
+            case 120: {
+                if (caracter == H_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 121;
+                } else if (caracter == R_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 124;
+                } else if (esCaracterDeIdentificador(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 137;
+                } else {
+                    errorInCurrentCharacter();
+                }
+                break;
+            }
+            case 121: {
+                if (caracter == E_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 122;
+                } else {
+                    verificarCaracter(caracter);
+                }
+                break;
+            }
+            case 122: {
+                if (caracter == N_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 123;
+                } else {
+                    verificarCaracter(caracter);
+                }
+                break;
+            }
+            case 123: {
+                verificarCaracterFinal(caracter);
+                break;
+            }
+            case 124: {
+                if (caracter == U_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 125;
+                } else {
+                    verificarCaracter(caracter);
+                }
+                break;
+            }
+            case 125: {
+                if (caracter == E_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 126;
+                } else {
+                    verificarCaracter(caracter);
+                }
+                break;
+            }
+            case 126: {
+                verificarCaracterFinal(caracter);
+                break;
+            }
+            case 127: {
+                if (caracter == O_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 128;
+                } else if (esCaracterDeIdentificador(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 137;
+                } else {
+                    errorInCurrentCharacter();
+                }
+                break;
+            }
+            case 128: {
+                if (caracter == I_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 129;
+                } else {
+                    verificarCaracter(caracter);
+                }
+                break;
+            }
+            case 129: {
+                if (caracter == D_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 130;
+                } else {
+                    verificarCaracter(caracter);
+                }
+                break;
+            }
+            case 130: {
+                verificarCaracterFinal(caracter);
+                break;
+            }
+            case 131: {
+                if (caracter == H_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 132;
+                } else if (esCaracterDeIdentificador(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 137;
+                } else {
+                    errorInCurrentCharacter();
+                }
+                break;
+            }
+            case 132: {
+                if (caracter == I_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 133;
+                } else {
+                    verificarCaracter(caracter);
+                }
+                break;
+            }
+            case 133: {
+                if (caracter == L_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 134;
+                } else {
+                    verificarCaracter(caracter);
+                }
+                break;
+            }
+            case 134: {
+                if (caracter == E_LOW) {
+                    lexema += Character.toString(caracter);
+                    estado = 135;
+                } else {
+                    verificarCaracter(caracter);
+                }
+                break;
+            }
+            case 135: {
+                verificarCaracterFinal(caracter);
+                break;
+            }
+            case 136: {
+                if (esCaracterDeIdentificador(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 137;
+                } else {
+                    errorInCurrentCharacter();
+                }
+                break;
+            }
+            case 137: {
+                if (esCaracterDeIdentificador(caracter)) {
+                    lexema += Character.toString(caracter);
+                    estado = 137;
+                } else {
+                    addToken(lexema, TOKEN_IDENTIFICADOR);
+                    nuevoLexema();
+                }
+                break;
+            }
+            case 138: {
+                if(esEspacio(caracter)){
+                    errorInCurrentCharacter();
+                } else {
+                    errorInCurrentCharacter();
+                }
+                break;
+            }
             default:
                 break;
         }
-
-        posicion++;
-        columnaActual++;
-        if (posicion >= fuente.length()) {
-            if (esEstadoFinal(estado)) {
+        
+        posicion++; // despues de evaluar un caracter, la posicion de evaluacion aumenta
+        columnaActual++; //Contador que tiene la posicion del caracter en cada linea
+        if (posicion >= fuente.length()) { //Si la longitud es igual se evalua segun el estado en que haya quedado
+            if (esEstadoFinal(estado)) { //si el lexema queda en un estado de aceptacion se agrega
                 addToken(lexema, lexema);
-            } else if (esEstadoNoFinal(estado)) {
+            } else if (esEstadoNoFinal(estado)) { //si no es estado de aceptacion se reporta el error
                 addError(lexema);
-            } else if(esIdentificadorFinal(estado)){
+            } else if (esIdentificadorFinal(estado)) { //Si es un identificador se agrega
                 addToken(lexema, TOKEN_IDENTIFICADOR);
             } else {
+                //Funcion que agrega los lexemas en un estado de aceptacion segun su token
                 switch (estado) {
                     case 1:
                         addToken(lexema, TOKEN_NUMERO_ENTERO);
@@ -1249,337 +1423,13 @@ public class Automata extends HerramientasAutomata {
                         break;
                 }
             }
-//            switch (estado) {
-//                case 1:
-//                    addToken(lexema, TOKEN_NUMERO_ENTERO);
-//                    break;
-//                case 2:
-//                    addToken(lexema, TOKEN_NUMERO_ENTERO);
-//                    break;
-//                case 3:
-//                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
-//                    break;
-//                case 4:
-//                    addError(lexema);
-//                    break;
-//                case 5:
-//                    addError(lexema);
-//                    break;
-//                case 6:
-//                    addError(lexema);
-//                    break;
-//                case 7:
-//                    addToken(lexema, TOKEN_NUMERO_DECIMAL);
-//                    break;
-//                case 8:
-//                    addToken(lexema, TOKEN_NUMERO_DECIMAL);
-//                    break;
-//                case 9:
-//                    addToken(lexema, TOKEN_NUMERO_DECIMAL);
-//                    break;
-//                case 10:
-//                    addError(lexema);
-//                    break;
-//                case 11:
-//                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
-//                    break;
-//                case 12:
-//                    addToken(lexema, TOKEN_SIGNO_PUNTUACION);
-//                    break;
-//                case 13:
-//                    addToken(lexema, TOKEN_SIGNO_AGRUPACION);
-//                    break;
-//                case 14:
-//                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
-//                    break;
-//                case 15:
-//                    addToken(lexema, TOKEN_COMENTARIO_UNA_LINEA);
-//                    break;
-//                case 16:
-//                    addError(lexema);
-//                    break;
-//                case 17:
-//                    addError(lexema);
-//                    break;
-//                case 18:
-//                    addToken(lexema, TOKEN_COMENTARIO_BLOQUE);
-//                    break;
-//                case 19:
-//                    addError(lexema);
-//                    break;
-//                case 20:
-//                    addToken(lexema, TOKEN_LITERAL);
-//                    break;
-//                case 21:
-//                    addToken(lexema, TOKEN_COMENTARIO_UNA_LINEA);
-//                    break;
-//                case 22:
-//                    addError(lexema);
-//                    break;
-//                case 23:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 24:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 25:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 26:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 27:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 28:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 29:
-//                    addError(lexema);
-//                    break;
-//                case 30:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 31:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 32:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 33:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 34:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 35:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 36:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 37:
-//                    addError(lexema);
-//                    break;
-//                case 38:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 39:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 40:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 41:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 42:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 43:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 44:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 45:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 46:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 47:
-//                    addError(lexema);
-//                    break;
-//                case 48:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 49:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 50:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 51:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 52:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 53:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 54:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 55:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 56:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 57:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 58:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 59:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 60:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 61:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 62:
-//                    addError(lexema);
-//                    break;
-//                case 63:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 64:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 65:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 66:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 67:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 68:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 69:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 70:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 71:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 72:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 73:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 74:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 75:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 76:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 77:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 78:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 79:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 80:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 81:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 82:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 83:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 84:
-//                    addError(lexema);
-//                    break;
-//                case 85:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 86:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 87:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 88:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 89:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 90:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 91:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 92:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 93:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 94:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 95:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 96:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 97:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 98:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 99:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 100:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 101:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 102:
-//                    addToken(lexema, TOKEN_IDENTIFICADOR);
-//                    break;
-//                case 103:
-//                    addToken(lexema, lexema);
-//                    break;
-//                case 104:
-//                    addError(lexema);
-//                    break;
-//                case 110:
-//                    addError(lexema);
-//                    break;
-//                case 120:
-//                    addError(lexema);
-//                    break;
-//                case 127:
-//                    addError(lexema);
-//                    break;
-//                case 131:
-//                    addError(lexema);
-//                    break;
-//            }
         } else {
+            //Se vuelve a llamar a el mismo hasta que la longitud sea mayor o igual a la del texto
             iniciarProceso();
         }
     }
 
+    //Metodo que varifica si contiene caracteres de un identificador, de lo contrario es una palabra reservada
     private void verificarCaracterFinal(char c) {
         if (esCaracterDeIdentificador(c)) {
             lexema += Character.toString(c);
@@ -1590,6 +1440,8 @@ public class Automata extends HerramientasAutomata {
         }
     }
 
+    //Metodo que verifica si el caracter actual no sigue con el camino de un automata pero pertenece
+    //a un caracter de identificador, entonces se convierte a identificador, igual si no se completa
     private void verificarCaracter(char c) {
         if (esCaracterDeIdentificador(c)) {
             lexema += Character.toString(c);
@@ -1600,6 +1452,7 @@ public class Automata extends HerramientasAutomata {
         }
     }
 
+    //Metodo que reporta errores que pueden ser seguidos de mas errores en conjunto
     private void errorInNextCharacter() {
         lexema += Character.toString(caracter);
         posicion++;
@@ -1620,6 +1473,7 @@ public class Automata extends HerramientasAutomata {
         }
     }
 
+    //Metodo que reporta errores encontrados en el caracter evaluado
     private void errorInCurrentCharacter() {
         addError(lexema);
         nuevoLexema();
@@ -1640,11 +1494,14 @@ public class Automata extends HerramientasAutomata {
         System.out.println(auxiliar);
     }
 
+    //Metodo encargado de agregar el error en la lista de objetos "listaErrores"
     private void addError(String lexema) {
-        ErrorLexema el = new ErrorLexema(lexema, 0, 0);
+        ErrorLexema el = new ErrorLexema(lexema, columnaError, filaActual);
         this.listaErrores.add(el);
+        columnaError = columnaActual + 1;
     }
 
+    //Metodo encargado de agregar los tokens en la lista de tokens "listaTokens"
     private void addToken(String lex, String tokn) {
         Token token = null;
         if (estado == 18) {
@@ -1655,9 +1512,10 @@ public class Automata extends HerramientasAutomata {
             token = new Token(tokn, lex, columna, filaActual);
         }
         this.listaTokens.add(token);
-        listaLexema.add(lex);
-        listaToken.add(tokn);
+//        listaLexema.add(lex);
+//        listaToken.add(tokn);
         columna = columnaActual + 1;
+        columnaError = columna;
     }
 
     public List<ErrorLexema> getListaErrores() {

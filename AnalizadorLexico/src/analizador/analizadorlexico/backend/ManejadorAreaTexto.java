@@ -78,6 +78,7 @@ public class ManejadorAreaTexto extends HerramientasAutomata {
         return contador;
     }
 
+    //Metodo que muestra una tabla contenida con los tokens validos
     public void mostrarTokens(){
         TablaTokens tt = new TablaTokens(null, true);
         if (!aut.getListaTokens().isEmpty() && aut.getListaErrores().isEmpty()){
@@ -89,6 +90,7 @@ public class ManejadorAreaTexto extends HerramientasAutomata {
         }
     }
     
+    //Metodo encargado de mandar a traer el texto formateado con la cadena encontrada en el texto
     public void subrayarTexto(String cadenaABuscar){
         Buscador buscador = new Buscador();
         String textoFinal = "<html>\n"

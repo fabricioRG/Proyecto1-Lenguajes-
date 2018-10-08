@@ -50,57 +50,65 @@ public class HerramientasAutomata {
     }
 
     public boolean esLetraMinuscula(char c) {
-        return c == A_LOW || c == B_LOW || c == C_LOW || c == D_LOW || c == E_LOW || c == F_LOW || c == G_LOW 
-                || c == H_LOW || c == I_LOW || c == J_LOW || c == K_LOW || c == L_LOW || c == M_LOW || c == N_LOW 
-                || c == O_LOW || c == P_LOW || c == Q_LOW || c == R_LOW || c == S_LOW || c == T_LOW || c == U_LOW 
+        return c == A_LOW || c == B_LOW || c == C_LOW || c == D_LOW || c == E_LOW || c == F_LOW || c == G_LOW
+                || c == H_LOW || c == I_LOW || c == J_LOW || c == K_LOW || c == L_LOW || c == M_LOW || c == N_LOW
+                || c == O_LOW || c == P_LOW || c == Q_LOW || c == R_LOW || c == S_LOW || c == T_LOW || c == U_LOW
                 || c == V_LOW || c == W_LOW || c == X_LOW || c == Y_LOW || c == Z_LOW;
     }
-    
-    public boolean esLetraMinusculaNoInicial(char c){
+
+    public boolean esLetraMinusculaNoInicial(char c) {
         return c == A_LOW || c == D_LOW || c == G_LOW || c == H_LOW || c == K_LOW || c == L_LOW
                 || c == M_LOW || c == N_LOW || c == O_LOW || c == Q_LOW || c == U_LOW || c == X_LOW
-                ||  c == Y_LOW || c == Z_LOW;
+                || c == Y_LOW || c == Z_LOW;
     }
-    
-    public boolean esCaracterDeIdentificador(char c){
+
+    public boolean esCaracterDeIdentificador(char c) {
         return esLetraMayuscula(c) || esLetraMinuscula(c) || esDigito(c) || c == GUION || c == GUION_BAJO;
     }
-    
-    public boolean esEstadoFinal(int estado){
+
+    public boolean esEstadoFinal(int estado) {
         for (int estadoFinal : estadosPalabrasReservadasFinales) {
-            if(estado == estadoFinal){
+            if (estado == estadoFinal) {
                 return true;
             }
         }
         return false;
     }
-    
-    public boolean esEstadoNoFinal(int estado){
+
+    public boolean esEstadoNoFinal(int estado) {
         for (int estadoNoFinal : estadosNoFinales) {
-            if(estado == estadoNoFinal){
+            if (estado == estadoNoFinal) {
                 return true;
             }
         }
         return false;
     }
-    
-    public boolean esIdentificadorFinal(int estado){
+
+    public boolean esIdentificadorFinal(int estado) {
         for (int efi : estadosFinalesIdentificador) {
-            if(estado == efi){
+            if (estado == efi) {
                 return true;
             }
         }
         return false;
     }
-    
-    public static final int[] estadosFinalesIdentificador = {23,24,25,26,27,30,31,33,34,35,38,39,41,
-    42,43,44,45,48,49,50,52,53,54,56,57,58,60,63,64,65,66,69,70,71,72,73,74,76,77,78,79,
-    80,81,82,85,86,87,88,89,91,92,93,94,95,97,98,99,100,101,102,105,106,107,108,111,112,
-    113,115,116,117,118,121,122,124,125,127,128,129,132,133,134};
-    public static final int[] estadosPalabrasReservadasFinales = {28,32,36,40,46,50,55,59,61,67,68,75,77,83,
-        90,96,103,109,114,119,123,126,130,135};
-    public static final int[] estadosNoFinales = {4,5,6,10,16,17,19,22,29,37,47,62,84,104,
-        110,120,127,131};
+
+    //Arreglo que contiene el identificador o numero de cada estado el cual es aceptado como final
+    public static final int[] estadosFinalesIdentificador = {23, 24, 25, 26, 27, 30, 31, 33, 34, 35, 38, 39, 41,
+        42, 43, 44, 45, 48, 49, 50, 52, 53, 54, 56, 57, 58, 60, 63, 64, 65, 66, 69, 70, 71, 72, 73, 74, 76, 77, 78, 79,
+        80, 81, 82, 85, 86, 87, 88, 89, 91, 92, 93, 94, 95, 97, 98, 99, 100, 101, 102, 105, 106, 107, 108, 111, 112,
+        113, 115, 116, 117, 118, 121, 122, 124, 125, 127, 128, 129, 132, 133, 134, 137};
+
+    //Arreglo que contiene el identificador de los estados que son palabras reservadas
+    public static final int[] estadosPalabrasReservadasFinales = {28, 32, 36, 40, 46, 50, 55, 59, 61, 67, 68, 75, 77, 83,
+        90, 96, 103, 109, 114, 119, 123, 126, 130, 135};
+
+    //Arreglo que contiene el identificador de los estados que no son finales
+    public static final int[] estadosNoFinales = {4, 5, 6, 10, 16, 17, 19, 22, 29, 37, 47, 62, 84, 104,
+        110, 120, 127, 131, 136, 138};
+
+    //Inicio de constantes con valor ACII necesarias para evaluar el automata
+    public static final int ESTADO_ERROR = 138;
     public static final int TAB = 9;
     public static final int SALTO_LINEA = 10;
     public static final int SALTO_PAGINA = 12;

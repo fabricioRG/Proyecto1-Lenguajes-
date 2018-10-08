@@ -21,21 +21,26 @@ public class ManejadorAnalizador {
 
     public ManejadorAnalizador(Analizador analizador) {
         this.analizador = analizador;
-
+        
     }
 
+    //Metodo encargado de abrir una ventana en blanco
     public void agregarVentana() {
         AreaTexto at = new AreaTexto();
         analizador.jTabbedPane.add(NEW_TAB, at);
         estadoGuardar();
     }
 
+    //Metodo encargado de agregar una nueva ventana con el texto cargado colocando como
+    //nombre de la ventana el path absoluta de tal
     public void agregarVentana(String path, String texto) {
         AreaTexto at = new AreaTexto();
         at.getjEditorPane1().setText(texto);
         analizador.jTabbedPane.add(path, at);
+        at.getMat().iniciarAutomata();
     }
 
+    //Metodo encargado de abrir una nueva ventana colocandole como texto inicial el seleccionado
     public void abrirDocumento(int i) {
         boolean error = false;
         SeleccionadorArchivo sa = new SeleccionadorArchivo(analizador, true);
@@ -68,8 +73,8 @@ public class ManejadorAnalizador {
         }
     }
 
+    //Metodo encargado de cerrar una ventanva, verificando que se hayan guardado los cambios o no
     public void cerrarVentana(int ventana) {
-        System.out.println(ventana);
         AreaTexto at = (AreaTexto) analizador.jTabbedPane.getSelectedComponent();
         if (at.isModificado()) {
             int respuesta = JOptionPane.showConfirmDialog(analizador, "¿Desea guardar los cambios?",
@@ -173,7 +178,7 @@ public class ManejadorAnalizador {
         for (int i = tamaño - 1; i >= 0; i--) {
             cerrarVentana(i);
         }
-        if (analizador.getComponentCount() == 0) {
+        if (analizador.getComponentCount() <= 0) {
             System.exit(0);
         }
     }
