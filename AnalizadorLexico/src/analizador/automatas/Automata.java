@@ -57,10 +57,11 @@ public class Automata extends HerramientasAutomata {
     }
 
     /**
-     * Metodo que contiene 137 "case" para su evalucacion, los cuales van seleccionandose
-     * mediante se cumple con las condiciones de cada uno, se lleva un contador
-     * de linea, asi como un contador de columna respectivamente para conocer
-     * su posicion en cualquier momento en el reporte de tokens
+     * Metodo que contiene 137 "case" para su evalucacion, los cuales van
+     * seleccionandose mediante se cumple con las condiciones de cada uno, se
+     * lleva un contador de linea, asi como un contador de columna
+     * respectivamente para conocer su posicion en cualquier momento en el
+     * reporte de tokens
      */
     public void iniciarProceso() {
         caracter = fuente.charAt(posicion);
@@ -174,7 +175,7 @@ public class Automata extends HerramientasAutomata {
                     lexema += Character.toString(caracter);
                     estado = 4;
                 } else {
-                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                    agregarOperador();
                     nuevoLexema();
                 }
                 break;
@@ -259,17 +260,17 @@ public class Automata extends HerramientasAutomata {
                 break;
             }
             case 11: {
-                addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                agregarOperador();
                 nuevoLexema();
                 break;
             }
             case 12: {
-                addToken(lexema, TOKEN_SIGNO_PUNTUACION);
+                agregarSignoPuntuacion();
                 nuevoLexema();
                 break;
             }
             case 13: {
-                addToken(lexema, TOKEN_SIGNO_AGRUPACION);
+                agregarSignoAgrupacion();
                 nuevoLexema();
                 break;
             }
@@ -281,7 +282,7 @@ public class Automata extends HerramientasAutomata {
                     lexema += Character.toString(caracter);
                     estado = 16;
                 } else {
-                    addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                    addToken(lexema, TOKEN_DIVISION);
                     nuevoLexema();
                 }
                 break;
@@ -1354,7 +1355,7 @@ public class Automata extends HerramientasAutomata {
                 break;
             }
             case 138: {
-                if(esEspacio(caracter)){
+                if (esEspacio(caracter)) {
                     errorInCurrentCharacter();
                 } else {
                     errorInCurrentCharacter();
@@ -1364,7 +1365,7 @@ public class Automata extends HerramientasAutomata {
             default:
                 break;
         }
-        
+
         posicion++; // despues de evaluar un caracter, la posicion de evaluacion aumenta
         columnaActual++; //Contador que tiene la posicion del caracter en cada linea
         if (posicion >= fuente.length()) { //Si la longitud es igual se evalua segun el estado en que haya quedado
@@ -1384,7 +1385,7 @@ public class Automata extends HerramientasAutomata {
                         addToken(lexema, TOKEN_NUMERO_ENTERO);
                         break;
                     case 3:
-                        addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                        agregarOperador();
                         break;
                     case 7:
                         addToken(lexema, TOKEN_NUMERO_DECIMAL);
@@ -1396,16 +1397,16 @@ public class Automata extends HerramientasAutomata {
                         addToken(lexema, TOKEN_NUMERO_DECIMAL);
                         break;
                     case 11:
-                        addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                        agregarOperador();
                         break;
                     case 12:
-                        addToken(lexema, TOKEN_SIGNO_PUNTUACION);
+                        agregarSignoPuntuacion();
                         break;
                     case 13:
-                        addToken(lexema, TOKEN_SIGNO_AGRUPACION);
+                        agregarSignoAgrupacion();
                         break;
                     case 14:
-                        addToken(lexema, TOKEN_OPERADOR_ARITMETICO);
+                        addToken(lexema, TOKEN_DIVISION);
                         break;
                     case 15:
                         addToken(lexema, TOKEN_COMENTARIO_UNA_LINEA);
@@ -1518,6 +1519,51 @@ public class Automata extends HerramientasAutomata {
         columnaError = columna;
     }
 
+    private void agregarOperador() {
+        char c = fuente.charAt(posicion - 1);
+        if (c == CRUZ) {
+            addToken(lexema, TOKEN_SUMA);
+        } else if(c == GUION){
+            addToken(lexema, TOKEN_RESTA);
+        } else if(c == ASTERISCO){
+            addToken(lexema, TOKEN_MULTIPLICACION);
+        } else if (c == DIAGONAL){
+            addToken(lexema, TOKEN_DIVISION);
+        } else {
+            addToken(lexema, TOKEN_MODULO);
+        }
+    }
+
+    private void agregarSignoPuntuacion(){
+        char c = fuente.charAt(posicion - 1);
+        if(c == PUNTO){
+            addToken(lexema, TOKEN_PUNTO);
+        } else if (c == COMA){
+            addToken(lexema, TOKEN_COMA);
+        } else if(c == PUNTO_Y_COMA){
+            addToken(lexema, TOKEN_PUNTO_Y_COMA);
+        } else {
+            addToken(lexema, TOKEN_DOS_PUNTOS);
+        }
+    }
+    
+    private void agregarSignoAgrupacion(){
+        char c = fuente.charAt(posicion - 1);
+        if(c == PARENTESIS_IZQUIERDO){
+            addToken(lexema, TOKEN_PARENTESIS_IZQUIERDO);
+        } else if (c == PARENTESIS_DERECHO){
+            addToken(lexema, TOKEN_PARENTESIS_DERECHO);
+        } else if(c == CORCHETE_IZQUIERDO){
+            addToken(lexema, TOKEN_CORCHETE_IZQUIERDO);
+        } else if (c == CORCHETE_DERECHO){
+            addToken(lexema, TOKEN_CORCHETE_DERECHO);
+        } else if(c == LLAVE_IZQUIERDA){
+            addToken(lexema, TOKEN_LLAVE_IZQUIERDA);
+        } else {
+            addToken(lexema, TOKEN_LLAVE_DERECHA);
+        }
+    }
+    
     public List<ErrorLexema> getListaErrores() {
         return listaErrores;
     }
